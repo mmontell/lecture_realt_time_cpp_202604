@@ -1,0 +1,2588 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Real-Time Analysis at the LHC — Lecture Template</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- KaTeX for math -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+
+<style id="__inlined_deck_css">
+/* ============================================================
+   Scientific lecture template — Computational × HEP
+   Palette: white / ink / accent blue  (sky #0EA5E9 by default)
+   Type: Inter + JetBrains Mono
+   ============================================================ */
+
+:root {
+  --ink: #0B0F14;
+  --ink-soft: #1b2330;
+  --ink-mute: #4a5568;
+  --line: #0B0F14;
+  --rule: rgba(11,15,20,0.12);
+  --paper: #ffffff;
+  --paper-soft: #f6f7f9;
+  --grid: rgba(11,15,20,0.06);
+
+  --accent: #0EA5E9;          /* default — tweakable */
+  --accent-ink: #0369a1;
+  --accent-soft: rgba(14,165,233,0.10);
+  --accent-line: rgba(14,165,233,0.35);
+
+  --serif: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --sans:  "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono:  "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --pad-x: 96px;
+  --pad-y: 72px;
+  --pad-y-tight: 56px;
+
+  --h1: 88px;
+  --h2: 56px;
+  --h3: 36px;
+  --body: 26px;
+  --small: 20px;
+  --tiny: 15px;
+}
+
+/* Dark mode (tweakable) */
+.dark-mode {
+  --ink: #e6ecf5;
+  --ink-soft: #c3cbd9;
+  --ink-mute: #8790a3;
+  --line: #e6ecf5;
+  --rule: rgba(230,236,245,0.16);
+  --paper: #0a0d12;
+  --paper-soft: #111520;
+  --grid: rgba(230,236,245,0.07);
+  --accent-soft: rgba(14,165,233,0.16);
+  --accent-line: rgba(14,165,233,0.55);
+}
+
+html, body { margin: 0; padding: 0; background: #000; }
+body { font-family: var(--sans); color: var(--ink); }
+
+/* ---- Slide shell -------------------------------------------- */
+.slide {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--body);
+  line-height: 1.42;
+  letter-spacing: -0.005em;
+  display: grid;
+  grid-template-rows: 72px 1fr 56px;
+  position: relative;
+}
+
+/* header band */
+.hdr {
+  padding: 28px var(--pad-x) 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: var(--tiny);
+  color: var(--ink-mute);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.hdr .sec { color: var(--ink); font-weight: 500; }
+.hdr .sec::before {
+  content: "";
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: var(--accent);
+  margin-right: 12px;
+  transform: translateY(-1px);
+  border-radius: 1px;
+}
+.hdr .tag { color: var(--ink-mute); }
+
+/* main region */
+.main {
+  padding: 0 var(--pad-x);
+  overflow: hidden;
+  position: relative;
+}
+
+/* footer band */
+.ftr {
+  padding: 0 var(--pad-x) 28px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: var(--tiny);
+  color: var(--ink-mute);
+  letter-spacing: 0.03em;
+}
+.ftr .credit { max-width: 60%; }
+.ftr .page {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ftr .page .bar {
+  width: 120px; height: 2px; background: var(--rule); position: relative;
+}
+.ftr .page .bar::after {
+  content: "";
+  position: absolute; left: 0; top: 0; height: 2px;
+  background: var(--accent);
+  width: var(--progress, 10%);
+}
+
+/* ---- Typography --------------------------------------------- */
+h1, h2, h3, h4 {
+  margin: 0;
+  font-family: var(--sans);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+h1 { font-size: var(--h1); line-height: 1.02; font-weight: 500; }
+h2 { font-size: var(--h2); line-height: 1.05; font-weight: 500; }
+h3 { font-size: var(--h3); line-height: 1.15; font-weight: 500; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: var(--tiny);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-ink);
+  font-weight: 500;
+}
+.dark-mode .eyebrow { color: var(--accent); }
+
+.lead { font-size: 30px; color: var(--ink-soft); max-width: 1200px; }
+p { margin: 0 0 0.8em 0; color: var(--ink-soft); }
+
+.mono { font-family: var(--mono); }
+.num  { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.accent { color: var(--accent-ink); }
+.dark-mode .accent { color: var(--accent); }
+
+/* ---- Rules & marks ----------------------------------------- */
+.rule-blue {
+  width: 56px; height: 2px; background: var(--accent); margin: 0 0 28px 0;
+}
+.rule-thin {
+  height: 1px; background: var(--rule); margin: 24px 0;
+}
+
+/* ---- Bullets -------------------------------------------------*/
+ul.bullets {
+  list-style: none; padding: 0; margin: 0;
+}
+ul.bullets > li {
+  position: relative;
+  padding: 14px 0 14px 42px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+  font-size: var(--body);
+}
+ul.bullets > li:last-child { border-bottom: 0; }
+ul.bullets > li::before {
+  content: counter(li, decimal-leading-zero);
+  counter-increment: li;
+  position: absolute; left: 0; top: 18px;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--accent-ink);
+  letter-spacing: 0.04em;
+}
+.dark-mode ul.bullets > li::before { color: var(--accent); }
+ul.bullets { counter-reset: li; }
+ul.bullets li .sub {
+  display: block;
+  color: var(--ink-mute);
+  font-size: 20px;
+  margin-top: 4px;
+}
+
+/* Plain dotted bullets (for two-column variant) */
+ul.dots { list-style: none; padding: 0; margin: 0; }
+ul.dots li {
+  position: relative; padding: 6px 0 6px 22px;
+  color: var(--ink-soft); font-size: 22px;
+}
+ul.dots li::before {
+  content: ""; position: absolute; left: 0; top: 16px;
+  width: 6px; height: 6px; background: var(--ink); border-radius: 50%;
+}
+
+/* ---- Code --------------------------------------------------- */
+.code {
+  background: var(--paper-soft);
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--accent);
+  font-family: var(--mono);
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--ink);
+  padding: 28px 32px;
+  white-space: pre;
+  overflow: hidden;
+  tab-size: 2;
+}
+.code .kw { color: var(--accent-ink); }
+.dark-mode .code .kw { color: var(--accent); }
+.code .cm { color: var(--ink-mute); font-style: italic; }
+.code .st { color: #047857; }
+.dark-mode .code .st { color: #34d399; }
+.code .fn { color: var(--ink); font-weight: 500; }
+.code .ty { color: var(--ink-soft); font-style: italic; }
+.code .ln {
+  display: inline-block; width: 36px; color: var(--ink-mute);
+  font-size: 15px; user-select: none; text-align: right; padding-right: 14px;
+}
+
+/* ---- Pseudocode block --------------------------------------- */
+.pcode {
+  font-family: var(--mono);
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.pcode .kw { color: var(--accent-ink); font-weight: 500; }
+.dark-mode .pcode .kw { color: var(--accent); }
+.pcode .cm { color: var(--ink-mute); }
+.pcode .ind { display: inline-block; width: 24px; }
+.pcode .line { display: block; padding: 2px 0; }
+.pcode .n { color: var(--ink-mute); font-size: 14px; display: inline-block; width: 32px; text-align: right; padding-right: 14px; }
+
+/* ---- Tables ------------------------------------------------- */
+table.cmp {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 22px;
+}
+table.cmp th, table.cmp td {
+  text-align: left;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+table.cmp th {
+  font-family: var(--mono); font-weight: 500; font-size: 14px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--ink-mute);
+  border-bottom: 1px solid var(--line);
+}
+table.cmp td.label {
+  font-family: var(--mono); font-size: 14px;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-mute);
+  width: 220px;
+}
+table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
+.dark-mode table.cmp .pos { color: var(--accent); }
+
+/* ---- Math block -------------------------------------------- */
+.math-feature {
+  font-size: 42px;
+  color: var(--ink);
+  padding: 28px 0;
+}
+.math-inline { font-size: inherit; }
+
+/* ---- Motif: dots + lines ----------------------------------- */
+.motif { position: absolute; pointer-events: none; }
+.motif circle { fill: var(--ink); }
+.motif circle.b { fill: var(--accent); }
+.motif line { stroke: var(--ink); stroke-width: 1; opacity: 0.35; }
+.motif line.b { stroke: var(--accent); opacity: 0.8; stroke-width: 1.4; }
+.no-motif .motif { display: none; }
+
+/* ---- Title cover -------------------------------------------*/
+.cover {
+  display: grid;
+  grid-template-rows: 72px 1fr 56px;
+}
+.cover .main {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.cover .title-block { position: relative; z-index: 2; }
+.cover h1 { font-size: 110px; letter-spacing: -0.03em; line-height: 0.98; font-weight: 500; }
+.cover h1 .accent-word { color: var(--accent); font-style: italic; font-weight: 400; }
+.cover .sub { font-size: 28px; color: var(--ink-mute); margin-top: 36px; max-width: 640px; }
+.cover .meta {
+  margin-top: 64px;
+  font-family: var(--mono); font-size: 16px; color: var(--ink-mute);
+  display: grid; gap: 10px;
+  letter-spacing: 0.02em;
+}
+.cover .meta .row { display: grid; grid-template-columns: 100px 1fr; gap: 24px; }
+.cover .meta .row .k { color: var(--accent-ink); text-transform: uppercase; letter-spacing: 0.1em; }
+.dark-mode .cover .meta .row .k { color: var(--accent); }
+[data-label="CV"] .meta .row .k,
+[data-label="Context"] .meta .row .k { color: var(--accent-ink); text-transform: uppercase; letter-spacing: 0.1em; }
+.dark-mode [data-label="CV"] .meta .row .k,
+.dark-mode [data-label="Context"] .meta .row .k { color: var(--accent); }
+
+/* ---- Section divider ---------------------------------------*/
+.divider {
+  background: var(--ink);
+  color: var(--paper);
+}
+.divider .hdr, .divider .ftr { color: rgba(255,255,255,0.55); }
+.divider .hdr .sec { color: #fff; }
+.divider .ftr .page { color: #fff; }
+.divider .ftr .page .bar { background: rgba(255,255,255,0.2); }
+.divider .main {
+  display: flex; flex-direction: column; justify-content: center;
+}
+.divider .sec-num {
+  font-family: var(--mono); font-size: 22px; color: var(--accent);
+  letter-spacing: 0.12em;
+}
+.divider h2 {
+  color: #fff; font-size: 132px; line-height: 0.95; font-weight: 400;
+  letter-spacing: -0.03em; margin-top: 28px; max-width: 1400px;
+}
+.divider .dek {
+  color: rgba(255,255,255,0.62); font-size: 26px; max-width: 880px; margin-top: 36px;
+}
+
+/* In dark mode, invert dividers to WHITE bg + dark ink text so they
+   stand out from the surrounding dark slides. */
+.dark-mode .divider {
+  background: #ffffff;
+  color: #0a0a0a;
+}
+.dark-mode .divider .hdr,
+.dark-mode .divider .ftr { color: rgba(10,10,10,0.55); }
+.dark-mode .divider .hdr .sec { color: #0a0a0a; }
+.dark-mode .divider .ftr .page { color: #0a0a0a; }
+.dark-mode .divider .ftr .page .bar { background: rgba(10,10,10,0.18); }
+.dark-mode .divider .sec-num { color: var(--accent); }
+.dark-mode .divider h2 { color: #0a0a0a; }
+.dark-mode .divider .dek { color: rgba(10,10,10,0.62); }
+/* Motif dots on dividers: keep visible on white — use dark ink */
+.dark-mode .divider .motif circle:not(.b) { fill: rgba(10,10,10,0.55); }
+.dark-mode .divider .motif line:not(.b) { stroke: rgba(10,10,10,0.35); }
+
+/* ---- Utility layouts ---------------------------------------*/
+.two-col {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 72px; height: 100%;
+  align-content: start;
+}
+.two-col.asym { grid-template-columns: 1.1fr 0.9fr; }
+.col h3 { margin-bottom: 16px; }
+.col .eyebrow { margin-bottom: 10px; display: block; }
+
+.agenda-grid {
+  display: grid; grid-template-columns: 1fr 1fr; column-gap: 96px; row-gap: 0;
+}
+.agenda-grid .item {
+  display: grid; grid-template-columns: 80px 1fr 80px;
+  padding: 22px 0; border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+}
+.agenda-grid .item .k { font-family: var(--mono); font-size: 15px; color: var(--accent-ink); letter-spacing: 0.05em; }
+.dark-mode .agenda-grid .item .k { color: var(--accent); }
+.agenda-grid .item .t { font-size: 26px; color: var(--ink); font-weight: 500; letter-spacing: -0.01em; }
+.agenda-grid .item .t .sub { display: block; font-weight: 400; color: var(--ink-mute); font-size: 18px; margin-top: 4px; font-family: var(--mono); letter-spacing: 0.02em; }
+.agenda-grid .item .dur { font-family: var(--mono); font-size: 15px; color: var(--ink-mute); text-align: right; }
+
+/* density variants */
+.density-dense .slide {
+  grid-template-rows: 60px 1fr 48px;
+  font-size: 22px;
+}
+.density-dense .hdr { padding-top: 22px; }
+.density-dense h1 { font-size: 72px; }
+.density-dense h2 { font-size: 44px; }
+.density-dense h3 { font-size: 28px; }
+.density-dense .lead { font-size: 24px; }
+.density-dense .main { padding-left: 72px; padding-right: 72px; }
+
+.density-spare h1 { font-size: 104px; }
+.density-spare h2 { font-size: 68px; }
+.density-spare .lead { font-size: 34px; }
+.density-spare ul.bullets > li { padding: 22px 0 22px 48px; font-size: 28px; }
+
+/* Placeholder plot */
+.plot {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  position: relative; overflow: hidden;
+}
+.plot svg { display: block; width: 100%; height: 100%; }
+.plot .pcap {
+  position: absolute; left: 20px; top: 16px;
+  font-family: var(--mono); font-size: 13px; color: var(--ink-mute);
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+/* Callout pill */
+.pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 6px 12px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+.dark-mode .pill { color: var(--accent); }
+.pill::before {
+  content: ""; width: 6px; height: 6px; background: currentColor; border-radius: 50%;
+}
+
+/* KaTeX adjustments */
+.katex { font-size: 1em !important; }
+.math-feature .katex { font-size: 1.1em !important; }
+
+/* Print friendliness for this deck */
+@media print {
+  html, body { background: #fff; }
+}
+
+</style>
+<script id="__inlined_motifs_js">
+/* Graph / network motif generators.
+   Deterministic per-seed so layouts stay stable across renders.
+*/
+(function () {
+  function mulberry32(seed) {
+    let t = seed >>> 0;
+    return function () {
+      t += 0x6D2B79F5;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // Build a dotted-graph SVG. Nodes placed on perturbed lattice;
+  // edges between nearest neighbors; a small subset highlighted blue.
+  function graphSVG(opts) {
+    const {
+      width = 900, height = 600, cols = 9, rows = 7,
+      jitter = 0.28, nodeR = 2.4, blueR = 3.4, seed = 7,
+      connectK = 2, highlightFrac = 0.18, edgeOpacity = 0.25,
+      cluster = null,        // {cx, cy, r} — pull nodes toward a center
+    } = opts || {};
+
+    const rnd = mulberry32(seed);
+    const gx = width / (cols + 1);
+    const gy = height / (rows + 1);
+    const nodes = [];
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        let x = gx * (i + 1) + (rnd() - 0.5) * gx * jitter * 2;
+        let y = gy * (j + 1) + (rnd() - 0.5) * gy * jitter * 2;
+        if (cluster) {
+          const dx = cluster.cx - x, dy = cluster.cy - y;
+          const d = Math.hypot(dx, dy);
+          if (d > cluster.r) {
+            const k = (d - cluster.r) / d * 0.45;
+            x += dx * k; y += dy * k;
+          }
+        }
+        nodes.push({ x, y, blue: false });
+      }
+    }
+    // Highlight some near the center of mass
+    const cxN = nodes.reduce((s,n)=>s+n.x,0)/nodes.length;
+    const cyN = nodes.reduce((s,n)=>s+n.y,0)/nodes.length;
+    const sorted = [...nodes].sort((a,b)=> (Math.hypot(a.x-cxN,a.y-cyN) - Math.hypot(b.x-cxN,b.y-cyN)));
+    const nHi = Math.max(3, Math.floor(nodes.length * highlightFrac));
+    for (let i = 0; i < nHi; i++) sorted[i].blue = true;
+
+    // Edges: connect each node to its nearest k neighbors (dedup).
+    const edges = new Set();
+    const eArr = [];
+    for (let i = 0; i < nodes.length; i++) {
+      const dists = [];
+      for (let j = 0; j < nodes.length; j++) {
+        if (i === j) continue;
+        dists.push({ j, d: Math.hypot(nodes[i].x-nodes[j].x, nodes[i].y-nodes[j].y) });
+      }
+      dists.sort((a,b)=>a.d-b.d);
+      for (let k = 0; k < connectK; k++) {
+        const j = dists[k].j;
+        const key = i < j ? i+'-'+j : j+'-'+i;
+        if (edges.has(key)) continue;
+        edges.add(key);
+        const blue = nodes[i].blue && nodes[j].blue;
+        eArr.push({ a: i, b: j, blue });
+      }
+    }
+
+    let svg = `<svg class="motif" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;">`;
+    // edges
+    for (const e of eArr) {
+      const a = nodes[e.a], b = nodes[e.b];
+      svg += `<line class="${e.blue?'b':''}" x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" ${e.blue?'':`opacity="${edgeOpacity}"`}/>`;
+    }
+    // nodes
+    for (const n of nodes) {
+      svg += `<circle class="${n.blue?'b':''}" cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${n.blue?blueR:nodeR}"/>`;
+    }
+    svg += `</svg>`;
+    return svg;
+  }
+
+  // Sparse line-of-dots decoration — a thin band of connected nodes.
+  function strandSVG(opts) {
+    const { width = 900, height = 120, n = 14, seed = 3, nodeR = 2.2, blueEvery = 5 } = opts || {};
+    const rnd = mulberry32(seed);
+    const pts = [];
+    for (let i = 0; i < n; i++) {
+      const t = i / (n - 1);
+      const x = 20 + t * (width - 40);
+      const y = height/2 + (rnd() - 0.5) * height * 0.55;
+      pts.push({ x, y, blue: (i % blueEvery) === 2 });
+    }
+    let svg = `<svg class="motif" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" style="width:100%;height:100%;">`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], b = pts[i+1];
+      const bl = a.blue && b.blue;
+      svg += `<line class="${bl?'b':''}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" ${bl?'':'opacity="0.3"'}/>`;
+    }
+    for (const p of pts) svg += `<circle class="${p.blue?'b':''}" cx="${p.x}" cy="${p.y}" r="${nodeR}"/>`;
+    svg += `</svg>`;
+    return svg;
+  }
+
+  // Concentric rings of hits. Graph edges connect each hit to nearby hits
+  // on adjacent rings. A handful of radial "real track" chains are
+  // highlighted blue — one hit per ring, curving slightly outward.
+  function detectorSVG(opts) {
+    const {
+      size = 780,
+      seed = 5,
+      rings = 8,          // number of concentric rings
+      innerR = 0.08,      // fraction of size
+      outerR = 0.48,
+      hitsMin = 18,       // hits on innermost ring
+      hitsGrow = 4,       // extra hits per ring outward
+      nTracks = 5,        // highlighted "real tracks"
+      nodeR = 2.6,
+      blueR = 4.4,
+      edgeOpacity = 0.22,
+      angularJitter = 0.55, // irregular spacing along the ring (fraction of step)
+      radialJitter = 0.14,  // radial scatter per hit (fraction of gap)
+    } = opts || {};
+
+    const cx = size / 2, cy = size / 2;
+    const rnd = mulberry32(seed);
+
+    // Build rings of hits — irregular angular + radial spacing.
+    const allHits = [];
+    const perRing = [];
+    const gap = (outerR - innerR) * size / (rings - 1);
+    for (let r = 0; r < rings; r++) {
+      const t = r / (rings - 1);
+      const radius = (innerR + t * (outerR - innerR)) * size;
+      const nHits = Math.round(hitsMin + r * hitsGrow);
+      const offset = rnd() * Math.PI * 2;
+      const step = (Math.PI * 2) / nHits;
+      const ringArr = [];
+      for (let i = 0; i < nHits; i++) {
+        // Non-uniform angular placement
+        const a = offset + i * step + (rnd() - 0.5) * step * angularJitter * 2;
+        const rr = radius + (rnd() - 0.5) * gap * radialJitter * 2;
+        const x = cx + Math.cos(a) * rr;
+        const y = cy + Math.sin(a) * rr;
+        const h = { x, y, ring: r, a, blue: false };
+        ringArr.push(h);
+        allHits.push(h);
+      }
+      perRing.push(ringArr);
+    }
+
+    // "Real track" chains: every track starts at the EXACT center
+    // (interaction point). Then picks ~every other ring and always includes
+    // the outermost ring so tracks reach the edge.
+    const trackChains = [];
+    const usedAngles = [];
+    const ipPoint = { x: cx, y: cy, ring: -1, a: 0, blue: false, isIP: true };
+    for (let t = 0; t < nTracks; t++) {
+      let a0 = rnd() * Math.PI * 2;
+      for (let tries = 0; tries < 20; tries++) {
+        let minGap = Math.PI;
+        for (const ua of usedAngles) {
+          const d = Math.abs(Math.atan2(Math.sin(a0-ua), Math.cos(a0-ua)));
+          if (d < minGap) minGap = d;
+        }
+        if (minGap > 0.55) break;
+        a0 = rnd() * Math.PI * 2;
+      }
+      usedAngles.push(a0);
+      const kappa = (rnd() - 0.5) * 0.30;
+      const chain = [ipPoint]; // start at interaction point
+      const ringStep = 2;
+      const ringIdxs = [];
+      for (let r = 0; r < rings; r += ringStep) ringIdxs.push(r);
+      if (ringIdxs[ringIdxs.length - 1] !== rings - 1) ringIdxs.push(rings - 1);
+      for (const r of ringIdxs) {
+        const targetA = a0 + kappa * (r / (rings - 1)) * Math.PI;
+        let best = null, bestD = Infinity;
+        for (const h of perRing[r]) {
+          const d = Math.abs(Math.atan2(Math.sin(h.a - targetA), Math.cos(h.a - targetA)));
+          if (d < bestD) { bestD = d; best = h; }
+        }
+        if (best) { best.blue = true; chain.push(best); }
+      }
+      trackChains.push(chain);
+    }
+
+    // Neighbor edges between adjacent rings (combinatorial graph).
+    const edges = [];
+    for (let r = 0; r < rings - 1; r++) {
+      for (const h of perRing[r]) {
+        const cands = perRing[r+1].map(n => ({
+          n, d: Math.hypot(n.x - h.x, n.y - h.y)
+        })).sort((a,b)=>a.d-b.d).slice(0, 2);
+        for (const c of cands) edges.push({ a: h, b: c.n });
+      }
+    }
+
+    // Render — viewBox expanded to give space for chronometer bezel + lugs.
+    const pad = size * 0.16; // bezel + lug padding
+    const vbSize = size + pad * 2;
+    const vbCx = vbSize / 2, vbCy = vbSize / 2;
+    const offX = pad, offY = pad;
+    let svg = `<svg class="motif detector" viewBox="0 0 ${vbSize} ${vbSize}" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;overflow:visible;">`;
+
+    // --- Chronometer bezel (analog, hairline) ---
+    // Inline styles are used on bezel elements because CSS `.motif circle { fill: var(--ink) }`
+    // overrides presentation attributes. Inline `style="..."` wins.
+    const dialR = size * 0.50;                       // inner dial edge
+    const bezelOuterR = size * 0.50 + pad * 0.38;    // outer bezel
+    const bezelMidR = (dialR + bezelOuterR) / 2;
+    const ink = 'var(--ink)';
+    // Lugs — slimmer, with a narrower "neck" where they meet the bezel (analog watch style)
+    const lugW = pad * 0.42, lugH = pad * 0.78;
+    const lugXOff = bezelOuterR * 0.58;
+    const lugs = [
+      { cx: vbCx - lugXOff, cy: vbCy - bezelOuterR - lugH * 0.32 },
+      { cx: vbCx + lugXOff, cy: vbCy - bezelOuterR - lugH * 0.32 },
+      { cx: vbCx - lugXOff, cy: vbCy + bezelOuterR + lugH * 0.32 },
+      { cx: vbCx + lugXOff, cy: vbCy + bezelOuterR + lugH * 0.32 },
+    ];
+    for (const lug of lugs) {
+      // Trapezoidal lug with rounded top
+      const x0 = lug.cx - lugW/2, x1 = lug.cx + lugW/2;
+      const y0 = lug.cy - lugH/2, y1 = lug.cy + lugH/2;
+      const narrow = lugW * 0.30;
+      // Path: rounded outer edge + narrowing neck toward bezel
+      const isTop = lug.cy < vbCy;
+      if (isTop) {
+        svg += `<path d="M ${(x0+narrow*0.3).toFixed(1)} ${y1.toFixed(1)} L ${x0.toFixed(1)} ${(y0+lugW*0.35).toFixed(1)} Q ${x0.toFixed(1)} ${y0.toFixed(1)} ${(x0+lugW*0.35).toFixed(1)} ${y0.toFixed(1)} L ${(x1-lugW*0.35).toFixed(1)} ${y0.toFixed(1)} Q ${x1.toFixed(1)} ${y0.toFixed(1)} ${x1.toFixed(1)} ${(y0+lugW*0.35).toFixed(1)} L ${(x1-narrow*0.3).toFixed(1)} ${y1.toFixed(1)}" style="fill:none;stroke:${ink};stroke-width:1.4;opacity:0.85;"/>`;
+      } else {
+        svg += `<path d="M ${(x0+narrow*0.3).toFixed(1)} ${y0.toFixed(1)} L ${x0.toFixed(1)} ${(y1-lugW*0.35).toFixed(1)} Q ${x0.toFixed(1)} ${y1.toFixed(1)} ${(x0+lugW*0.35).toFixed(1)} ${y1.toFixed(1)} L ${(x1-lugW*0.35).toFixed(1)} ${y1.toFixed(1)} Q ${x1.toFixed(1)} ${y1.toFixed(1)} ${x1.toFixed(1)} ${(y1-lugW*0.35).toFixed(1)} L ${(x1-narrow*0.3).toFixed(1)} ${y0.toFixed(1)}" style="fill:none;stroke:${ink};stroke-width:1.4;opacity:0.85;"/>`;
+      }
+    }
+    // Crown at 3 o'clock — small fluted cylinder
+    const crownW = pad * 0.22, crownH = pad * 0.38;
+    const crownX = vbCx + bezelOuterR - 1;
+    const crownY = vbCy;
+    svg += `<rect x="${crownX.toFixed(1)}" y="${(crownY - crownH/2).toFixed(1)}" width="${crownW.toFixed(1)}" height="${crownH.toFixed(1)}" rx="1.5" style="fill:none;stroke:${ink};stroke-width:1.4;opacity:0.85;"/>`;
+    // Crown stem (little nub protruding further)
+    const stemW = crownW * 0.6, stemH = crownH * 0.4;
+    svg += `<rect x="${(crownX + crownW - 0.5).toFixed(1)}" y="${(crownY - stemH/2).toFixed(1)}" width="${stemW.toFixed(1)}" height="${stemH.toFixed(1)}" rx="1" style="fill:none;stroke:${ink};stroke-width:1.2;opacity:0.85;"/>`;
+
+    // Bezel rings — hairline, no fill. Inline style beats `.motif circle` CSS.
+    svg += `<circle cx="${vbCx}" cy="${vbCy}" r="${bezelOuterR.toFixed(1)}" style="fill:none;stroke:${ink};stroke-width:1.8;opacity:0.95;"/>`;
+    svg += `<circle cx="${vbCx}" cy="${vbCy}" r="${(bezelOuterR - pad*0.08).toFixed(1)}" style="fill:none;stroke:${ink};stroke-width:0.8;opacity:0.55;"/>`;
+    svg += `<circle cx="${vbCx}" cy="${vbCy}" r="${dialR.toFixed(1)}" style="fill:none;stroke:${ink};stroke-width:0.8;opacity:0.55;"/>`;
+
+    // Tick marks — 60 minute ticks, emphasize hour (every 5); blue at 12/3/6/9
+    for (let i = 0; i < 60; i++) {
+      const ang = (i / 60) * Math.PI * 2 - Math.PI / 2;
+      const isHour = i % 5 === 0;
+      const isQuarter = i % 15 === 0;
+      const tIn  = bezelMidR - (isHour ? 7 : 2.5);
+      const tOut = bezelMidR + (isHour ? 7 : 2.5);
+      const sw = isHour ? (isQuarter ? 2.4 : 1.6) : 0.8;
+      const col = isQuarter ? 'var(--accent)' : ink;
+      const op = isHour ? 0.95 : 0.6;
+      svg += `<line x1="${(vbCx + Math.cos(ang)*tIn).toFixed(1)}" y1="${(vbCy + Math.sin(ang)*tIn).toFixed(1)}" x2="${(vbCx + Math.cos(ang)*tOut).toFixed(1)}" y2="${(vbCy + Math.sin(ang)*tOut).toFixed(1)}" style="stroke:${col};stroke-width:${sw};stroke-linecap:round;opacity:${op};"/>`;
+    }
+    // Hour numerals 12/3/6/9
+    const numerals = [
+      { n: '12', ang: -Math.PI/2 },
+      { n: '3',  ang: 0 },
+      { n: '6',  ang: Math.PI/2 },
+      { n: '9',  ang: Math.PI },
+    ];
+    const numR = dialR - 24;
+    for (const nm of numerals) {
+      const nx = vbCx + Math.cos(nm.ang) * numR;
+      const ny = vbCy + Math.sin(nm.ang) * numR;
+      svg += `<text x="${nx.toFixed(1)}" y="${ny.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="15" font-weight="500" style="fill:${ink};opacity:0.6;letter-spacing:0.5px;">${nm.n}</text>`;
+    }
+
+    // --- Apply dial offset to all hit/track coordinates ---
+    // Shift existing geometry into the padded viewBox.
+    const shift = (x, y) => [x + offX, y + offY];
+
+    // Dim combinatorial edges (all of them, unmarked)
+    for (const e of edges) {
+      const [x1, y1] = shift(e.a.x, e.a.y);
+      const [x2, y2] = shift(e.b.x, e.b.y);
+      svg += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="var(--ink)" stroke-width="0.8" opacity="${edgeOpacity}"/>`;
+    }
+
+    // Thick blue track polylines — a single smooth arc per chain so the
+    // curve has no inflection points (charged-particle trajectory).
+    // Also collect extra hits sampled along each arc so tracks aren't just
+    // 3-hit skeletons.
+    const extraTrackHits = [];
+    for (const chain of trackChains) {
+      if (chain.length < 2) continue;
+      const p0 = chain[0];
+      const pN = chain[chain.length - 1];
+      const pM = chain[Math.floor(chain.length / 2)];
+      const ax = p0.x + offX, ay = p0.y + offY;
+      const bx = pM.x + offX, by = pM.y + offY;
+      const cx2 = pN.x + offX, cy2 = pN.y + offY;
+      const d = 2 * (ax * (by - cy2) + bx * (cy2 - ay) + cx2 * (ay - by));
+      let dStr;
+      let arcInfo = null;
+      // Extend endpoint slightly beyond outermost hit (outbound particle feel).
+      const vxEnd = pN.x - cx, vyEnd = pN.y - cy;
+      const extendFrac = 0.10;
+      const pEx = { x: cx + vxEnd * (1 + extendFrac) + offX, y: cy + vyEnd * (1 + extendFrac) + offY };
+      if (Math.abs(d) < 1e-3) {
+        dStr = `M ${ax.toFixed(1)} ${ay.toFixed(1)} L ${pEx.x.toFixed(1)} ${pEx.y.toFixed(1)}`;
+      } else {
+        const ux = ((ax*ax + ay*ay) * (by - cy2) + (bx*bx + by*by) * (cy2 - ay) + (cx2*cx2 + cy2*cy2) * (ay - by)) / d;
+        const uy = ((ax*ax + ay*ay) * (cx2 - bx) + (bx*bx + by*by) * (ax - cx2) + (cx2*cx2 + cy2*cy2) * (bx - ax)) / d;
+        const r = Math.hypot(ax - ux, ay - uy);
+        const cross = (bx - ax) * (cy2 - ay) - (by - ay) * (cx2 - ax);
+        const sweep = cross > 0 ? 1 : 0;
+        const angEx0 = Math.atan2(cy2 - uy, cx2 - ux);
+        const angEx1 = Math.atan2(pEx.y - uy, pEx.x - ux);
+        let dAng = angEx1 - angEx0;
+        if (sweep === 1 && dAng < 0) dAng += Math.PI * 2;
+        if (sweep === 0 && dAng > 0) dAng -= Math.PI * 2;
+        const maxExt = 0.25;
+        if (Math.abs(dAng) > maxExt) dAng = Math.sign(dAng) * maxExt;
+        const angExt = angEx0 + dAng;
+        const exX = ux + Math.cos(angExt) * r;
+        const exY = uy + Math.sin(angExt) * r;
+        dStr = `M ${ax.toFixed(1)} ${ay.toFixed(1)} A ${r.toFixed(1)} ${r.toFixed(1)} 0 0 ${sweep} ${exX.toFixed(1)} ${exY.toFixed(1)}`;
+        arcInfo = { ux, uy, r, sweep };
+      }
+      svg += `<path d="${dStr}" fill="none" stroke="var(--accent)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>`;
+
+      // Sample extra hits between consecutive chain hits along the arc.
+      // Skip the interaction-point segment (don't draw a hit right at the center).
+      for (let i = 0; i < chain.length - 1; i++) {
+        const a = chain[i], b = chain[i+1];
+        if (a.isIP) continue; // no extra hit in the IP→first-ring segment
+        const t = 0.5;
+        let x, y;
+        const aShift = { x: a.x + offX, y: a.y + offY };
+        const bShift = { x: b.x + offX, y: b.y + offY };
+        if (arcInfo) {
+          const ang0 = Math.atan2(aShift.y - arcInfo.uy, aShift.x - arcInfo.ux);
+          const ang1 = Math.atan2(bShift.y - arcInfo.uy, bShift.x - arcInfo.ux);
+          let delta = ang1 - ang0;
+          if (arcInfo.sweep === 1 && delta < 0) delta += Math.PI * 2;
+          if (arcInfo.sweep === 0 && delta > 0) delta -= Math.PI * 2;
+          const ang = ang0 + delta * t;
+          const jr = arcInfo.r + (rnd() - 0.5) * 3;
+          x = arcInfo.ux + Math.cos(ang) * jr;
+          y = arcInfo.uy + Math.sin(ang) * jr;
+        } else {
+          x = aShift.x + (bShift.x - aShift.x) * t + (rnd() - 0.5) * 3;
+          y = aShift.y + (bShift.y - aShift.y) * t + (rnd() - 0.5) * 3;
+        }
+        extraTrackHits.push({ x, y });
+      }
+    }
+
+    // All hits on top. Highlighted ones bigger/blue.
+    for (const h of allHits) {
+      if (h.blue) continue;
+      svg += `<circle cx="${(h.x+offX).toFixed(1)}" cy="${(h.y+offY).toFixed(1)}" r="${nodeR}" fill="var(--ink)"/>`;
+    }
+    for (const h of allHits) {
+      if (!h.blue) continue;
+      svg += `<circle cx="${(h.x+offX).toFixed(1)}" cy="${(h.y+offY).toFixed(1)}" r="${blueR}" fill="var(--accent)"/>`;
+    }
+    // Extra sampled hits along fitted arcs
+    for (const h of extraTrackHits) {
+      svg += `<circle cx="${h.x.toFixed(1)}" cy="${h.y.toFixed(1)}" r="${(blueR*0.78).toFixed(1)}" fill="var(--accent)"/>`;
+    }
+    // Interaction point marker (small accent circle + ring)
+    svg += `<circle cx="${vbCx}" cy="${vbCy}" r="${(blueR*1.5).toFixed(1)}" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity="0.8"/>`;
+    svg += `<circle cx="${vbCx}" cy="${vbCy}" r="${(blueR*0.65).toFixed(1)}" fill="var(--accent)"/>`;
+
+    svg += `</svg>`;
+    return svg;
+  }
+
+  window.Motifs = { graphSVG, strandSVG, detectorSVG };
+})();
+
+</script>
+<script id="__inlined_deck_stage_js">
+/**
+ * <deck-stage> — reusable web component for HTML decks.
+ *
+ * Handles:
+ *  (a) speaker notes — reads <script type="application/json" id="speaker-notes">
+ *      and posts {slideIndexChanged: N} to the parent window on nav.
+ *  (b) keyboard navigation — ←/→, PgUp/PgDn, Space, Home/End, number keys.
+ *  (c) press R to reset to slide 0 (with a tasteful keyboard hint).
+ *  (d) bottom-center overlay showing slide count + hints, fades out on idle.
+ *  (e) auto-scaling — inner canvas is a fixed design size (default 1920×1080)
+ *      scaled with `transform: scale()` to fit the viewport, letterboxed.
+ *      Set the `noscale` attribute to render at authored size (1:1) — the
+ *      PPTX exporter sets this so its DOM capture sees unscaled geometry.
+ *  (f) print — `@media print` lays every slide out as its own page at the
+ *      design size, so the browser's Print → Save as PDF produces a clean
+ *      one-page-per-slide PDF with no extra setup.
+ *
+ * Slides are HIDDEN, not unmounted. Non-active slides stay in the DOM with
+ * `visibility: hidden` + `opacity: 0`, so their state (videos, iframes,
+ * form inputs, React trees) is preserved across navigation.
+ *
+ * Lifecycle event — the component dispatches a `slidechange` CustomEvent on
+ * itself whenever the active slide changes (including the initial mount).
+ * The event bubbles and composes out of shadow DOM, so you can listen on
+ * the <deck-stage> element or on document:
+ *
+ *   document.querySelector('deck-stage').addEventListener('slidechange', (e) => {
+ *     e.detail.index         // new 0-based index
+ *     e.detail.previousIndex // previous index, or -1 on init
+ *     e.detail.total         // total slide count
+ *     e.detail.slide         // the new active slide element
+ *     e.detail.previousSlide // the prior slide element, or null on init
+ *     e.detail.reason        // 'init' | 'keyboard' | 'click' | 'tap' | 'api'
+ *   });
+ *
+ * Persistence: current slide index is saved to localStorage keyed by the
+ * document path, so refresh returns you to the same place.
+ *
+ * Usage:
+ *   <deck-stage width="1920" height="1080">
+ *     <section data-label="Title">...</section>
+ *     <section data-label="Agenda">...</section>
+ *   </deck-stage>
+ *
+ * Slides are the direct element children of <deck-stage>. Each slide is
+ * automatically tagged with:
+ *   - data-screen-label="NN Label"   (1-indexed, for comment flow)
+ *   - data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text"
+ */
+
+(() => {
+  const DESIGN_W_DEFAULT = 1920;
+  const DESIGN_H_DEFAULT = 1080;
+  const STORAGE_PREFIX = 'deck-stage:slide:';
+  const OVERLAY_HIDE_MS = 1800;
+  const VALIDATE_ATTR = 'no_overflowing_text,no_overlapping_text,slide_sized_text';
+
+  const pad2 = (n) => String(n).padStart(2, '0');
+
+  const stylesheet = `
+    :host {
+      position: fixed;
+      inset: 0;
+      display: block;
+      background: #000;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .stage {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .canvas {
+      position: relative;
+      transform-origin: center center;
+      flex-shrink: 0;
+      background: #fff;
+      will-change: transform;
+    }
+
+    /* Slides live in light DOM (via <slot>) so authored CSS still applies.
+       We absolutely position each slotted child to stack them. */
+    ::slotted(*) {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      box-sizing: border-box !important;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+    }
+    ::slotted([data-deck-active]) {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    /* Tap zones for mobile — back/forward thirds like Stories.
+       Transparent, no visible UI, don't block the overlay. */
+    .tapzones {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      z-index: 2147482000;
+      pointer-events: none;
+    }
+    .tapzone {
+      flex: 1;
+      pointer-events: auto;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Only activate tap zones on coarse pointers (touch devices). */
+    @media (hover: hover) and (pointer: fine) {
+      .tapzones { display: none; }
+    }
+
+    .overlay {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translate(-50%, 6px) scale(0.92);
+      filter: blur(6px);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      background: #000;
+      color: #fff;
+      border-radius: 999px;
+      font-size: 12px;
+      font-feature-settings: "tnum" 1;
+      letter-spacing: 0.01em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 260ms ease, transform 260ms cubic-bezier(.2,.8,.2,1), filter 260ms ease;
+      transform-origin: center bottom;
+      z-index: 2147483000;
+      user-select: none;
+    }
+    .overlay[data-visible] {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, 0) scale(1);
+      filter: blur(0);
+    }
+
+    .btn {
+      appearance: none;
+      -webkit-appearance: none;
+      background: transparent;
+      border: 0;
+      margin: 0;
+      padding: 0;
+      color: inherit;
+      font: inherit;
+      cursor: default;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 999px;
+      color: rgba(255,255,255,0.72);
+      transition: background 140ms ease, color 140ms ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .btn:active { background: rgba(255,255,255,0.18); }
+    .btn:focus { outline: none; }
+    .btn:focus-visible { outline: none; }
+    .btn::-moz-focus-inner { border: 0; }
+    .btn svg { width: 14px; height: 14px; display: block; }
+    .btn.reset {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      padding: 0 10px 0 12px;
+      gap: 6px;
+      color: rgba(255,255,255,0.72);
+    }
+    .btn.reset .kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 10px;
+      line-height: 1;
+      color: rgba(255,255,255,0.88);
+      background: rgba(255,255,255,0.12);
+      border-radius: 4px;
+    }
+
+    .count {
+      font-variant-numeric: tabular-nums;
+      color: #fff;
+      font-weight: 500;
+      padding: 0 8px;
+      min-width: 42px;
+      text-align: center;
+      font-size: 12px;
+    }
+    .count .sep { color: rgba(255,255,255,0.45); margin: 0 3px; font-weight: 400; }
+    .count .total { color: rgba(255,255,255,0.55); }
+
+    .divider {
+      width: 1px;
+      height: 14px;
+      background: rgba(255,255,255,0.18);
+      margin: 0 2px;
+    }
+
+    /* ── Print: one page per slide, no chrome ────────────────────────────
+       The screen layout stacks every slide at inset:0 inside a scaled
+       canvas; for print we want them in document flow at the authored
+       design size so the browser paginates one slide per sheet. The
+       @page size is set from the width/height attributes via the inline
+       <style id="deck-stage-print-page"> that connectedCallback injects
+       into <head> (the @page at-rule has no effect inside shadow DOM). */
+    @media print {
+      :host {
+        position: static;
+        inset: auto;
+        background: none;
+        overflow: visible;
+        color: inherit;
+      }
+      .stage { position: static; display: block; }
+      .canvas {
+        transform: none !important;
+        width: auto !important;
+        height: auto !important;
+        background: none;
+        will-change: auto;
+      }
+      ::slotted(*) {
+        position: relative !important;
+        inset: auto !important;
+        width: var(--deck-design-w) !important;
+        height: var(--deck-design-h) !important;
+        box-sizing: border-box !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto;
+        break-after: page;
+        page-break-after: always;
+        break-inside: avoid;
+        overflow: hidden;
+      }
+      ::slotted(*:last-child) {
+        break-after: auto;
+        page-break-after: auto;
+      }
+      .overlay, .tapzones { display: none !important; }
+    }
+  `;
+
+  class DeckStage extends HTMLElement {
+    static get observedAttributes() { return ['width', 'height', 'noscale']; }
+
+    constructor() {
+      super();
+      this._root = this.attachShadow({ mode: 'open' });
+      this._index = 0;
+      this._slides = [];
+      this._notes = [];
+      this._hideTimer = null;
+      this._mouseIdleTimer = null;
+      this._storageKey = STORAGE_PREFIX + (location.pathname || '/');
+
+      this._onKey = this._onKey.bind(this);
+      this._onResize = this._onResize.bind(this);
+      this._onSlotChange = this._onSlotChange.bind(this);
+      this._onMouseMove = this._onMouseMove.bind(this);
+      this._onTapBack = this._onTapBack.bind(this);
+      this._onTapForward = this._onTapForward.bind(this);
+    }
+
+    get designWidth() {
+      return parseInt(this.getAttribute('width'), 10) || DESIGN_W_DEFAULT;
+    }
+    get designHeight() {
+      return parseInt(this.getAttribute('height'), 10) || DESIGN_H_DEFAULT;
+    }
+
+    connectedCallback() {
+      this._render();
+      this._loadNotes();
+      this._syncPrintPageRule();
+      window.addEventListener('keydown', this._onKey);
+      window.addEventListener('resize', this._onResize);
+      window.addEventListener('mousemove', this._onMouseMove, { passive: true });
+      // Initial collection + layout happens via slotchange, which fires on mount.
+    }
+
+    disconnectedCallback() {
+      window.removeEventListener('keydown', this._onKey);
+      window.removeEventListener('resize', this._onResize);
+      window.removeEventListener('mousemove', this._onMouseMove);
+      if (this._hideTimer) clearTimeout(this._hideTimer);
+      if (this._mouseIdleTimer) clearTimeout(this._mouseIdleTimer);
+    }
+
+    attributeChangedCallback() {
+      if (this._canvas) {
+        this._canvas.style.width = this.designWidth + 'px';
+        this._canvas.style.height = this.designHeight + 'px';
+        this._canvas.style.setProperty('--deck-design-w', this.designWidth + 'px');
+        this._canvas.style.setProperty('--deck-design-h', this.designHeight + 'px');
+        this._fit();
+        this._syncPrintPageRule();
+      }
+    }
+
+    _render() {
+      const style = document.createElement('style');
+      style.textContent = stylesheet;
+
+      const stage = document.createElement('div');
+      stage.className = 'stage';
+
+      const canvas = document.createElement('div');
+      canvas.className = 'canvas';
+      canvas.style.width = this.designWidth + 'px';
+      canvas.style.height = this.designHeight + 'px';
+      canvas.style.setProperty('--deck-design-w', this.designWidth + 'px');
+      canvas.style.setProperty('--deck-design-h', this.designHeight + 'px');
+
+      const slot = document.createElement('slot');
+      slot.addEventListener('slotchange', this._onSlotChange);
+      canvas.appendChild(slot);
+      stage.appendChild(canvas);
+
+      // Tap zones (mobile): left third = back, right third = forward.
+      const tapzones = document.createElement('div');
+      tapzones.className = 'tapzones export-hidden';
+      tapzones.setAttribute('aria-hidden', 'true');
+      const tzBack = document.createElement('div');
+      tzBack.className = 'tapzone tapzone--back';
+      const tzMid = document.createElement('div');
+      tzMid.className = 'tapzone tapzone--mid';
+      tzMid.style.pointerEvents = 'none';
+      const tzFwd = document.createElement('div');
+      tzFwd.className = 'tapzone tapzone--fwd';
+      tzBack.addEventListener('click', this._onTapBack);
+      tzFwd.addEventListener('click', this._onTapForward);
+      tapzones.append(tzBack, tzMid, tzFwd);
+
+      // Overlay: compact, solid black, with clickable controls.
+      const overlay = document.createElement('div');
+      overlay.className = 'overlay export-hidden';
+      overlay.setAttribute('role', 'toolbar');
+      overlay.setAttribute('aria-label', 'Deck controls');
+      overlay.innerHTML = `
+        <button class="btn prev" type="button" aria-label="Previous slide" title="Previous (←)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
+        </button>
+        <span class="count" aria-live="polite"><span class="current">1</span><span class="sep">/</span><span class="total">1</span></span>
+        <button class="btn next" type="button" aria-label="Next slide" title="Next (→)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+        </button>
+        <span class="divider"></span>
+        <button class="btn reset" type="button" aria-label="Reset to first slide" title="Reset (R)">Reset<span class="kbd">R</span></button>
+      `;
+
+      overlay.querySelector('.prev').addEventListener('click', () => this._go(this._index - 1, 'click'));
+      overlay.querySelector('.next').addEventListener('click', () => this._go(this._index + 1, 'click'));
+      overlay.querySelector('.reset').addEventListener('click', () => this._go(0, 'click'));
+
+      this._root.append(style, stage, tapzones, overlay);
+      this._canvas = canvas;
+      this._slot = slot;
+      this._overlay = overlay;
+      this._countEl = overlay.querySelector('.current');
+      this._totalEl = overlay.querySelector('.total');
+    }
+
+    /** @page must live in the document stylesheet — it's a no-op inside
+     *  shadow DOM. Inject/update a single <head> style tag so the print
+     *  sheet matches the design size and Save-as-PDF yields one slide per
+     *  page with no margins. */
+    _syncPrintPageRule() {
+      const id = 'deck-stage-print-page';
+      let tag = document.getElementById(id);
+      if (!tag) {
+        tag = document.createElement('style');
+        tag.id = id;
+        document.head.appendChild(tag);
+      }
+      tag.textContent =
+        '@page { size: ' + this.designWidth + 'px ' + this.designHeight + 'px; margin: 0; } ' +
+        '@media print { html, body { margin: 0 !important; padding: 0 !important; background: none !important; overflow: visible !important; height: auto !important; } ' +
+        '* { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }';
+    }
+
+    _onSlotChange() {
+      this._collectSlides();
+      this._restoreIndex();
+      this._applyIndex({ showOverlay: false, broadcast: true, reason: 'init' });
+      this._fit();
+    }
+
+    _collectSlides() {
+      const assigned = this._slot.assignedElements({ flatten: true });
+      this._slides = assigned.filter((el) => {
+        // Skip template/style/script nodes even if someone slots them.
+        const tag = el.tagName;
+        return tag !== 'TEMPLATE' && tag !== 'SCRIPT' && tag !== 'STYLE';
+      });
+
+      this._slides.forEach((slide, i) => {
+        const n = i + 1;
+        // Determine a label for comment flow: prefer explicit data-label,
+        // then an existing data-screen-label, then first heading, else "Slide".
+        let label = slide.getAttribute('data-label');
+        if (!label) {
+          const existing = slide.getAttribute('data-screen-label');
+          if (existing) {
+            // Strip any leading number the author may have included.
+            label = existing.replace(/^\s*\d+\s*/, '').trim() || existing;
+          }
+        }
+        if (!label) {
+          const h = slide.querySelector('h1, h2, h3, [data-title]');
+          if (h) label = (h.textContent || '').trim().slice(0, 40);
+        }
+        if (!label) label = 'Slide';
+        slide.setAttribute('data-screen-label', `${pad2(n)} ${label}`);
+
+        // Validation attribute for comment flow / auto-checks.
+        if (!slide.hasAttribute('data-om-validate')) {
+          slide.setAttribute('data-om-validate', VALIDATE_ATTR);
+        }
+
+        slide.setAttribute('data-deck-slide', String(i));
+      });
+
+      if (this._totalEl) this._totalEl.textContent = String(this._slides.length || 1);
+      if (this._index >= this._slides.length) this._index = Math.max(0, this._slides.length - 1);
+    }
+
+    _loadNotes() {
+      const tag = document.getElementById('speaker-notes');
+      if (!tag) { this._notes = []; return; }
+      try {
+        const parsed = JSON.parse(tag.textContent || '[]');
+        if (Array.isArray(parsed)) this._notes = parsed;
+      } catch (e) {
+        console.warn('[deck-stage] Failed to parse #speaker-notes JSON:', e);
+        this._notes = [];
+      }
+    }
+
+    _restoreIndex() {
+      try {
+        const raw = localStorage.getItem(this._storageKey);
+        if (raw != null) {
+          const n = parseInt(raw, 10);
+          if (Number.isFinite(n) && n >= 0 && n < this._slides.length) {
+            this._index = n;
+          }
+        }
+      } catch (e) { /* ignore */ }
+    }
+
+    _persistIndex() {
+      try { localStorage.setItem(this._storageKey, String(this._index)); }
+      catch (e) { /* ignore */ }
+    }
+
+    _applyIndex({ showOverlay = true, broadcast = true, reason = 'init' } = {}) {
+      if (!this._slides.length) return;
+      const prev = this._prevIndex == null ? -1 : this._prevIndex;
+      const curr = this._index;
+      this._slides.forEach((s, i) => {
+        if (i === curr) s.setAttribute('data-deck-active', '');
+        else s.removeAttribute('data-deck-active');
+      });
+      if (this._countEl) this._countEl.textContent = String(curr + 1);
+      this._persistIndex();
+
+      if (broadcast) {
+        // (1) Legacy: host-window postMessage for speaker-notes renderers.
+        try { window.postMessage({ slideIndexChanged: curr }, '*'); } catch (e) {}
+
+        // (2) In-page CustomEvent on the <deck-stage> element itself.
+        //     Bubbles and composes out of shadow DOM so slide code can listen:
+        //       document.querySelector('deck-stage').addEventListener('slidechange', e => {
+        //         e.detail.index, e.detail.previousIndex, e.detail.total, e.detail.slide, e.detail.reason
+        //       });
+        const detail = {
+          index: curr,
+          previousIndex: prev,
+          total: this._slides.length,
+          slide: this._slides[curr] || null,
+          previousSlide: prev >= 0 ? (this._slides[prev] || null) : null,
+          reason: reason, // 'init' | 'keyboard' | 'click' | 'tap' | 'api'
+        };
+        this.dispatchEvent(new CustomEvent('slidechange', {
+          detail,
+          bubbles: true,
+          composed: true,
+        }));
+      }
+
+      this._prevIndex = curr;
+      if (showOverlay) this._flashOverlay();
+    }
+
+    _flashOverlay() {
+      if (!this._overlay) return;
+      this._overlay.setAttribute('data-visible', '');
+      if (this._hideTimer) clearTimeout(this._hideTimer);
+      this._hideTimer = setTimeout(() => {
+        this._overlay.removeAttribute('data-visible');
+      }, OVERLAY_HIDE_MS);
+    }
+
+    _fit() {
+      if (!this._canvas) return;
+      // PPTX export sets noscale so the DOM capture sees authored-size
+      // geometry — the scaled canvas is in shadow DOM, so the exporter's
+      // resetTransformSelector can't reach .canvas.style.transform directly.
+      if (this.hasAttribute('noscale')) {
+        this._canvas.style.transform = 'none';
+        return;
+      }
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const s = Math.min(vw / this.designWidth, vh / this.designHeight);
+      this._canvas.style.transform = `scale(${s})`;
+    }
+
+    _onResize() { this._fit(); }
+
+    _onMouseMove() {
+      // Keep overlay visible while mouse moves; hide after idle.
+      this._flashOverlay();
+    }
+
+    _onTapBack(e) {
+      e.preventDefault();
+      this._go(this._index - 1, 'tap');
+    }
+
+    _onTapForward(e) {
+      e.preventDefault();
+      this._go(this._index + 1, 'tap');
+    }
+
+    _onKey(e) {
+      // Ignore when the user is typing.
+      const t = e.target;
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      const key = e.key;
+      let handled = true;
+
+      if (key === 'ArrowRight' || key === 'PageDown' || key === ' ' || key === 'Spacebar') {
+        this._go(this._index + 1, 'keyboard');
+      } else if (key === 'ArrowLeft' || key === 'PageUp') {
+        this._go(this._index - 1, 'keyboard');
+      } else if (key === 'Home') {
+        this._go(0, 'keyboard');
+      } else if (key === 'End') {
+        this._go(this._slides.length - 1, 'keyboard');
+      } else if (key === 'r' || key === 'R') {
+        this._go(0, 'keyboard');
+      } else if (/^[0-9]$/.test(key)) {
+        // 1..9 jump to that slide; 0 jumps to 10.
+        const n = key === '0' ? 9 : parseInt(key, 10) - 1;
+        if (n < this._slides.length) this._go(n, 'keyboard');
+      } else {
+        handled = false;
+      }
+
+      if (handled) {
+        e.preventDefault();
+        this._flashOverlay();
+      }
+    }
+
+    _go(i, reason = 'api') {
+      if (!this._slides.length) return;
+      const clamped = Math.max(0, Math.min(this._slides.length - 1, i));
+      if (clamped === this._index) {
+        this._flashOverlay();
+        return;
+      }
+      this._index = clamped;
+      this._applyIndex({ showOverlay: true, broadcast: true, reason });
+    }
+
+    // Public API ------------------------------------------------------------
+
+    /** Current slide index (0-based). */
+    get index() { return this._index; }
+    /** Total slide count. */
+    get length() { return this._slides.length; }
+    /** Programmatically navigate. */
+    goTo(i) { this._go(i, 'api'); }
+    next() { this._go(this._index + 1, 'api'); }
+    prev() { this._go(this._index - 1, 'api'); }
+    reset() { this._go(0, 'api'); }
+  }
+
+  if (!customElements.get('deck-stage')) {
+    customElements.define('deck-stage', DeckStage);
+  }
+})();
+
+</script>
+
+<script type="application/json" id="speaker-notes">
+[
+  "Welcome everyone. Today's lecture sits at the intersection of computational science and high-energy physics. We'll focus on a very concrete engineering problem: building a C++ application for real-time analysis at the LHC. I want you to leave with a clear mental model of what 'real-time' means at 40 MHz, and why the tooling choices we make matter.",
+  "Here's the arc. We'll start by framing the problem — why traditional offline analysis doesn't scale. Then we'll walk through the architecture of the real-time system, look at the hot loop in actual C++, talk about the algorithmic heart of it, and compare the tradeoffs between offline and real-time paradigms. By the end you should be able to read a real-time analysis codebase and know where to look first.",
+  "Part one. Let me set the scene: the LHC produces collisions at a rate that dwarfs what we can store. Every decision about what to keep must happen in microseconds.",
+  "A concrete example of the problem. At 40 MHz bunch crossings, with O(100) tracks per event and a strict latency budget, you cannot afford to be clever in ways that aren't also fast. This slide lays out the scale in numbers — keep these in mind as we discuss the code.",
+  "Part two. Architecture. The real-time analysis stack is a pipeline: detector readout, trigger, reconstruction, selection, and a lossy write-out. Each stage has a latency and bandwidth budget.",
+  "Here's the hot loop. Notice three things: we pre-allocate all memory outside the loop, we use structure-of-arrays layout for vectorization, and we avoid any branching that depends on the physics content of the event.",
+  "Part three. Algorithms. The core of real-time selection is pattern recognition — associating hits into tracks, and tracks into decision primitives. This is where the physics meets the compute.",
+  "Pseudocode for the track-finding kernel we'll be optimizing in the exercises. Read it top-down; the indentation structure follows the physics.",
+  "A worked comparison: offline versus real-time. Same physics goal, different constraints. The key insight is that real-time analysis forces you to be honest about which parts of your algorithm actually matter.",
+  "Before you leave today, these are the three mental models I want you to have. The rest of the series will build on them.",
+  "Questions and discussion. I'll stay after for anyone who wants to look at code.",
+  "Thanks. Reach out any time — links on the slide. We'll pick this up next week with live coding."
+]
+</script>
+
+<style>
+  /* Slide-specific layouts */
+  .cover-motif-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cover-motif { width: 880px; height: 880px; position: relative; }
+
+  .big-numbers {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;
+    margin-top: 40px;
+  }
+  .big-numbers .cell { border-top: 1px solid var(--ink); padding-top: 18px; }
+  .big-numbers .n { font-family: var(--mono); font-size: 68px; font-weight: 500; line-height: 1; letter-spacing: -0.02em; color: var(--ink); }
+  .big-numbers .n .unit { font-size: 28px; color: var(--ink-mute); font-weight: 400; margin-left: 4px; }
+  .big-numbers .lbl { font-family: var(--mono); font-size: 13px; text-transform: uppercase; color: var(--ink-mute); letter-spacing: 0.08em; margin-top: 12px; }
+
+  /* Pipeline diagram */
+  .pipeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 32px; }
+  .pipeline .stage {
+    position: relative;
+    padding: 24px 24px 24px 28px;
+    border-left: 2px solid var(--accent);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .pipeline .stage + .stage { border-left-color: var(--rule); }
+  .pipeline .stage .n { font-family: var(--mono); font-size: 13px; color: var(--accent-ink); letter-spacing: 0.1em; text-transform: uppercase; }
+  .dark-mode .pipeline .stage .n { color: var(--accent); }
+  .pipeline .stage .t { font-size: 24px; font-weight: 500; margin-top: 10px; }
+  .pipeline .stage .d { font-family: var(--mono); font-size: 14px; color: var(--ink-mute); margin-top: 10px; letter-spacing: 0.02em; line-height: 1.4; }
+
+  .pipeline .stage::after {
+    content: "";
+    position: absolute; right: -10px; top: 50%;
+    width: 0; height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 10px solid var(--rule);
+    transform: translateY(-50%);
+    z-index: 1;
+    background: var(--paper);
+  }
+  .pipeline .stage:last-child::after { display: none; }
+
+  /* Cover geometric */
+  .cover-frame {
+    position: absolute; right: 96px; top: 50%; transform: translateY(-50%);
+    width: 620px; height: 620px;
+  }
+
+  /* Code slide */
+  .code-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    border-bottom: 1px solid var(--rule); padding-bottom: 12px; margin-bottom: 18px;
+    font-family: var(--mono); font-size: 14px; color: var(--ink-mute); letter-spacing: 0.04em;
+  }
+  .code-head .file { color: var(--ink); }
+  .code-head .file::before { content: "◆ "; color: var(--accent); }
+
+  .cover h1 .line { display: block; }
+  .meta .v { color: var(--ink); }
+  .dark-mode .meta .v { color: var(--ink); }
+
+  .kbar {
+    display: flex; align-items: center; gap: 14px; margin-top: 24px;
+  }
+  .kbar .k {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-mute);
+  }
+  .kbar .sw {
+    width: 44px; height: 6px; background: var(--accent);
+  }
+
+  /* Algorithm slide two-pane */
+  .algo-layout {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 72px;
+    height: 100%; align-content: start;
+  }
+  .algo-layout .pane h4 {
+    font-family: var(--mono); font-size: 14px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-mute); font-weight: 500;
+    margin-bottom: 18px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule);
+  }
+
+  /* QA slide */
+  .qa {
+    display: grid; grid-template-rows: 1fr auto; height: 100%;
+    align-items: center;
+  }
+  .qa-big {
+    font-size: 260px; font-weight: 300; letter-spacing: -0.04em; line-height: 0.9;
+  }
+  .qa-big .q { color: var(--accent); font-style: italic; font-weight: 300; }
+  .qa .contact {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 48px;
+    padding-top: 28px; border-top: 1px solid var(--rule);
+    font-family: var(--mono); font-size: 18px;
+  }
+  .qa .contact .k { font-size: 12px; color: var(--ink-mute); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+
+  /* tweaks panel */
+  .tweaks-panel {
+    position: fixed; right: 18px; bottom: 70px; z-index: 2147483600;
+    width: 300px; background: #0a0d12; color: #e6ecf5; border-radius: 10px;
+    font-family: "JetBrains Mono", monospace; font-size: 12px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+    padding: 14px 16px 16px;
+    display: none;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .tweaks-panel[data-open] { display: block; }
+  .tweaks-panel h5 { margin: 0 0 12px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(230,236,245,0.5); font-weight: 500; }
+  .tweaks-panel label { display: block; margin-bottom: 12px; }
+  .tweaks-panel label .lab { display: flex; justify-content: space-between; font-size: 11px; color: rgba(230,236,245,0.65); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .tweaks-panel .swatches { display: flex; gap: 6px; }
+  .tweaks-panel .swatches button {
+    width: 28px; height: 28px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer; padding: 0; transition: transform .1s;
+  }
+  .tweaks-panel .swatches button[data-on] { outline: 2px solid #fff; outline-offset: 2px; }
+  .tweaks-panel select, .tweaks-panel input[type=range] {
+    width: 100%; background: #1a1f2a; color: #e6ecf5; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px; padding: 6px; font-family: inherit; font-size: 12px;
+  }
+  .tweaks-panel .row { display: flex; gap: 8px; align-items: center; }
+  .tweaks-panel .toggle {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0; font-size: 12px;
+  }
+  .tweaks-panel .toggle input { accent-color: #0ea5e9; }
+
+  /* Placeholder strand on cover bottom */
+  .cover-strand {
+    position: absolute; left: 96px; right: 96px; bottom: 120px; height: 90px; opacity: .55;
+  }
+</style>
+</head>
+
+<body>
+
+<deck-stage width="1920" height="1080">
+
+  <!-- ============ 01 COVER ============ -->
+  <section class="slide cover" data-label="Title">
+    <div class="hdr">
+      <div class="sec">LECTURE 01 · RTA at the LHC</div>
+      <div class="tag">19 · 04 · 2026</div>
+    </div>
+    <div class="main">
+      <div class="title-block">
+        <div class="eyebrow">Computational Science × High Energy Physics</div>
+        <h1 style="margin-top:28px;">
+          <span class="line">C++ programming</span>
+          <span class="line">for <span class="accent-word">real-time</span></span>
+          <span class="line">analysis at the LHC.</span>
+        </h1>
+        <div class="kbar">
+          <span class="sw"></span>
+          <span class="k">Guest Lecture · University of Manchester</span>
+        </div>
+        <div class="meta">
+          <div class="row"><span class="k">Lecturer</span><span class="v">Marco Montella</span></div>
+          <div class="row"><span class="k">Affil.</span><span class="v">The Ohio State University</span></div>
+          <div class="row"><span class="k">Session</span><span class="v">01 of 04 · 30 min + Q&A</span></div>
+          <div class="row"><span class="k"></span><span class="v"></span></div>
+        </div>
+      </div>
+
+      <div style="position:relative;height:100%;">
+        <div class="cover-motif-wrap">
+          <div class="cover-motif" id="cover-motif"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 6%;"></span><span class="num">01 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CV ============ -->
+  <section class="slide" data-label="CV">
+    <div class="hdr">
+      <div class="sec">§ 00 · About Me</div>
+      <div class="tag">CV</div>
+    </div>
+    <div class="main">
+      <div class="two-col asym">
+        <div class="col">
+          <h3 style="margin-top:14px;font-size: 90px;">Pleased to meet you!</h3>
+          <span class="eyebrow" style="font-size: 100px;">Marco Montella</span>
+          <p style="margin-top:20px; max-width: 700px;">
+            Physicist working at the intersection of high-energy physics, 
+            data acquisition and real-time computing.
+          </p>
+          <div class="pill" style="margin-top:16px;">PostDoctoral Researcher</div>
+          <div class="pill" style="margin-top:5px;">Ohio State University</div>
+          <div class="meta" style="margin-top:28px;">
+            <div class="row" style="margin-top:60px;"><span class="k"></span><span class="v">ATLAS Experiment · CERN</span></div>
+            <div class="row" style="margin-top:30px;font-size:25px"><span class="k">Research Focus: </span><span class="v" >Real-time analysis · Physics Beyond the Standard Model · Dark Matter · Data Acquisition</span></div>
+            <div class="row" style="margin-top:10px;font-size:25px"><span class="k">Education: </span><span class="v">High Energy Physics PhD, UCL (London), 2020</span></div>
+            <div class="row" style="margin-top:10px;font-size:25px"><span class="k">About Me: </span><span class="v">Dedicated photographer, mediocre speedcuber, awful runner</span></div>
+          </div>
+        </div>
+        <div class="col">
+          <span class="eyebrow" style="margin-top:150px;">A rare good photo!</span>
+          <div class="col">
+            <img src="uploads/marco.jpg"
+                 style="width:90%; height:500px; object-fit:cover; object-position:top;"
+                 alt="Marco Montella">
+          </div>          
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 11%;"></span><span class="num">02 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 02 AGENDA ============ -->
+  <section class="slide" data-label="Agenda">
+    <div class="hdr">
+      <div class="sec">§ Agenda</div>
+      <div class="tag">L01 · OUTLINE</div>
+    </div>
+    <div class="main">
+      <div class="eyebrow">What we'll cover today</div>
+      <h2 style="margin-top:18px;">The microscopic world - in the blink of an eye </h2>
+      <div class="rule-blue" style="margin-top:36px;"></div>
+
+      <div class="agenda-grid" style="margin-top:18px;">
+        <div class="item">
+          <div class="k">§ 01</div>
+          <div class="t">ATLAS: The Forge of Physics
+            <span class="sub">Why Real-Time Analysis is essential</span>
+          </div>
+          <div class="dur">10'</div>
+        </div>
+        <div class="item">
+          <div class="k">§ 02</div>
+          <div class="t">System architecture
+            <span class="sub">Trigger · Reco · Selection</span>
+          </div>
+          <div class="dur">12'</div>
+        </div>
+        <div class="item">
+          <div class="k">§ 03</div>
+          <div class="t">Inside the hot loop
+            <span class="sub">Modern C++, cache, SoA</span>
+          </div>
+          <div class="dur">15'</div>
+        </div>
+        <div class="item">
+          <div class="k">§ 04</div>
+          <div class="t">Track-finding kernel
+            <span class="sub">Pseudocode → SIMD</span>
+          </div>
+          <div class="dur">12'</div>
+        </div>
+        <div class="item">
+          <div class="k">§ 05</div>
+          <div class="t">Offline vs. real-time
+            <span class="sub">Budget, latency, losses</span>
+          </div>
+          <div class="dur">8'</div>
+        </div>
+        <div class="item">
+          <div class="k">§ 06</div>
+          <div class="t">Takeaways & Q&A
+            <span class="sub">And a small homework</span>
+          </div>
+          <div class="dur">—</div>
+        </div>
+      </div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 17%;"></span><span class="num">03 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 03 SECTION DIVIDER 1 ============ -->
+  <section class="slide divider" data-label="§1 Scale">
+    <div class="hdr">
+      <div class="sec">§ 01 · Our setting</div>
+      <div class="tag">DIVIDER</div>
+    </div>
+    <div class="main">
+      <div class="sec-num">PART ONE — 5 MINUTES</div>
+      <h2>ATLAS<br/>the forge of physics</h2>
+      <div class="dek">What does the largest experiment in physics do, and why exceptional real-time computing is needed!</div>
+      <div id="divider-motif-1" style="position:absolute; right: 96px; top: 50%; transform: translateY(-50%); width: 520px; height: 520px; opacity: 0.9;"></div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 22%;"></span><span class="num">04 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 05 ATLAS ============ -->
+  <section class="slide" data-label="Context">
+    <div class="hdr">
+      <div class="sec">§ 01 · Our Setting</div>
+      <div class="tag">CV</div>
+    </div>
+    <div class="main">
+      <div class="two-col asym">
+        <div class="col">
+          <span class="eyebrow" style="font-size: 100px;">ATLAS</span>
+          <p style="margin-top:20px; max-width: 900px;">
+            Largest of the four main experiments at the Large Hadron Collider (CERN)
+          </p>
+          <!-- <ul style="margin-top:20px; max-width:700px; padding-left:20px;">
+            <li>Ciao</li>
+          </ul> -->
+          <div class="meta" style="margin-top:28px;">
+            <div class="row" style="margin-top:30px;font-size:25px"><span class="k">Mission: </span><span class="v" >Researching the fundamental bluilding blocks of reality</span></div>
+            <div class="row" style="margin-top:10px;font-size:25px"><span class="k">Areas of research: </span><span class="v">Measurements of properties of elementary particles · Searches for undiscovered physics phenomena</span></div>
+            <div class="row" style="margin-top:30px;font-size:25px"><span class="k">HOW? </span><span class="v">Collect, reconstruct & analyze the products of proton collisions delivered by the LHC</span></div>
+            <div class="row" style="margin-top:10px;font-size:25px"><span class="k">The Detector </span><span class="v">46m x 25m, capable of measuring position, momentum and properties of any particle produced in proton collisions</span></div>
+          </div>
+          <div class="col" style="margin-top:28px;">
+            <img src="uploads/collision.png"
+                 style="width:100%; height:380px; object-fit:contain; object-position:center;"
+                 alt="">
+          </div>
+        </div>
+        <div class="col" style="display:flex; flex-direction:column; align-items:center;">
+          <span class="eyebrow" style="margin-top:30px;">The Large Hadron Collider</span>
+          <div class="col">
+            <img src="uploads/LHC.jpg.webp"
+                 style="width:100%; height:300px; object-fit:cover; object-position:top;"
+                 alt="Marco Montella">
+          </div>
+          <span class="eyebrow" style="margin-top:30px;">The ATLAS Detector</span>
+          <div class="col">
+            <img src="uploads/ATLAS.png"
+                 style="width:100%; height:390px; object-fit:cover; object-position:top;"
+                 alt="Marco Montella">
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 28%;"></span><span class="num">05 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 06 CONTEXT ============ -->
+  <section class="slide" data-label="Context">
+    <div class="hdr">
+      <div class="sec">§ 01 · Our Setting</div>
+      <div class="tag">CONTEXT</div>
+    </div>
+    <div class="main">
+      <div class="two-col asym">
+        <div class="col">
+          <!-- text / key-value content here -->
+          <div class="meta" style="margin-top:28px;">
+            <div class="row" style="margin-top:30px;font-size:25px"><span class="k">Collision Products: </span><span class="v">About 1000 particles per collision</span></div>
+            <div class="row" style="margin-top:30px;font-size:25px"><span class="k">Which particles? </span><span class="v"> Muons, Electrons, Photons, Neutrinos (invisible), Tau leptons, "Jets" of collimated hadrons & more</span></div>
+            <div class="row" style="margin-top:50px;font-size:40pxx"><span class="k">Goal:  </span><span class="v"> Measure direction and momentum of all particles</span></div>
+            <div class="row" style="margin-top:30px;font-size:25pxx"><span class="k">How?  </span><span class="v">Different particles require different strategies.</span></div>
+            <div class="row" style="margin-top:70px;font-size:70pxx"><span class="k">Examples:</span><span class="v"></span></div>
+            <div class="row" style="margin-top:30px;font-size:25pxx"><span class="k">Charged Particles:  </span><span class="v">Detection by tracking direction of flight</span></div>
+            <div class="row" style="margin-top:30px;font-size:25pxx"><span class="k">Jets of hadrons:  </span><span class="v">Energy sampling in dedicated "Calorimeter" system</span></div>
+            <div class="row" style="margin-top:30px;font-size:25pxx"><span class="k">Muons:  </span><span class="v">Tracking in both innermost and outermost layers of ATLAS</span></div>
+          </div>
+        </div>
+        <div class="col" style="display:flex; flex-direction:column; align-items:center;">
+          <span class="eyebrow" style="margin-top:15px;">Physics objects in a slice of the ATLAS detector</span>
+          <div class="col">
+            <img src="uploads/ATLASSlice.png"
+                 style="width:1000px; height:900px; object-fit:contain; object-position:center;"
+                 alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 33%;"></span><span class="num">06 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 07 CONTEXT ============ -->
+  <section class="slide" data-label="Context">
+    <div class="hdr">
+      <div class="sec">§ 01 · Our Setting</div>
+      <div class="tag">CONTEXT</div>
+    </div>
+    <div class="main" style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:32px;">
+      <!-- ↑ tweak padding-top to shift the block down from the top of the slide -->
+      <p style="margin:0 0 18px; text-align:center; max-width:800px; color:var(--ink); font-size:var(--medium);">
+        A realistic ATLAS Event
+      </p>
+      <img src="uploads/ATLAS_VP1_First13p6TeVStableBeams2025_run496908_evt17131827_2025-05-05T14-22-14_v3.png"
+           style="width:auto; height:700px; object-fit:contain; object-position:center;"
+           alt="">
+      <div class="meta" style="margin-top:24px; text-align:center;">
+        <div class="row"><span class="k">ONE EVENT: </span><span class="v"> ~1000 particles &rarr; 60.000 tracker hits + countless calorimeter energy deposits</span></div>
+        <div class="row" style="margin-top:15px;font-size:40px"><span class="k">40 MILLION TIMES PER SECOND </span><span class="v"></span></div>
+      </div>
+    </div>
+    
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 39%;"></span><span class="num">07 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 08 CONTEXT ============ -->
+  <section class="slide" data-label="Context">
+    <div class="hdr">
+      <div class="sec">§ 01 · Our Setting</div>
+      <div class="tag">CONTEXT</div>
+    </div>
+    <div class="main">
+      <div class="two-col asym" style="grid-template-columns: 0.9fr 1.1fr;">
+        <div class="col">
+          <span class="eyebrow" style="font-size:80px; letter-spacing:-0.03em;">A <i>Big</i> Data Problem!</span>
+          <ul style="margin-top:24px; max-width:700px; padding-left:24px; font-size:var(--medium); line-height:1.7;">
+            <li>Any one event could contain key insight on Physics beyond the Standard Model</li>
+          </ul>
+          <div class="meta" style="margin-top:32px;">
+            <div class="row" style="margin-top:20px;font-size:25px;"><span class="k">Can we save every event? </span><span class="v"></span></div>
+            <div class="row" style="margin-top:10px;font-size:25px;"><span class="k"></span><span class="v">NO &mdash; Event Size ~ 2 MB. Full data retention is beyond current resources:</span></div>
+          </div>
+          <div class="math-feature" style="font-size: 30px; margin-top: 0px;margin-bottom:0px; text-align:center;">
+            $$\begin{aligned}
+              \text{Data Volume} &= \text{Event Rate} \times \text{Event Size} \\
+                                 &= 40 \cdot 10^6\,\text{evt/s} \times 2\,\text{MB/evt} \simeq 8\,\text{TB/s}
+            \end{aligned}$$
+          </div>
+          <div class="meta" style="margin-top:-32px;">
+            <div class="row" style="margin-top:10px;font-size:25px;"><span class="k">Solution: </span><span class="v">A <b>"TRIGGER"</b> System</span></div>
+            <div class="row" style="margin-top:30px;font-size:25px;"><span class="k">I.E.: </span><span class="v">Perform <i><b>Real Time</b></i> event reconstruction to decide <br>which events to <span style="color:var(--accent);">SAVE</span> and which to <span style="color:red;">DISCARD</span></div>
+            <div class="row" style="margin-top:10px;font-size:25px;"><span class="k">Task: </span><span class="v">Reconstruct low-level inputs (hits, energy deposits) into physics objects (electrons, jets, muons...)</span></div>
+          </div>
+        </div>
+        <div class="col" style="display:flex; flex-direction:column; align-items:center;">
+          <p style="margin-top:30px; text-align:center; font-size:40px; font-weight:500;">ATLAS uses a two-stage Trigger system</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:16px; width:100%;">
+            <div>
+              <div class="mono accent" style="font-size:18px; letter-spacing:0.06em;">LEVEL-1 · L1</div>
+              <h3 style="margin-top:10px; font-size:26px;">Hardware Based</h3>
+              <p style="margin-top:10px; font-size:18px;">Initial, coarse reconstruction. Preserves 1 event every ~400.</p>
+              <div class="math-feature" style="font-size: 30px; margin-top: -30px; text-align:center;">
+                $$\underbrace{40\,\text{MHz}}_{\text{collisions}} \;\longrightarrow\;
+                \underbrace{100\,\text{kHz}}_{\text{L1 pass}}$$
+              </div>
+            </div>
+            <div style="border:2px solid var(--accent); border-radius:6px; padding:12px 16px 0px; overflow:hidden;">
+              <div class="mono accent" style="font-size:18px; letter-spacing:0.06em;">High-Level Trigger · HLT</div>
+              <h3 style="margin-top:10px; font-size:26px;">C++ based computing farm</h3>
+              <p style="margin-top:10px; font-size:18px;">More accurate reconstruction, decides which events are permanently saved.</p>
+              <div class="math-feature" style="font-size: 30px; margin-top: -30px;margin-bottom:-30px; text-align:center;">
+                $$\underbrace{100\,\text{kHz}}_{\text{HLT process}} \;\longrightarrow\;
+                \underbrace{2\,\text{kHz}}_{\text{Store}}$$
+              </div>
+            </div>
+          </div>
+          <span class="eyebrow" style="margin-top:24px;">A Multi-Stage Trigger Example: Which Picture shows a beloved Hero?</span>
+          <div class="col">
+            <img src="uploads/trigger_cartoon.png"
+                 style="width:100%; height:430px; object-fit:cover; object-position:center;"
+                 alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 44%;"></span><span class="num">08 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 09 TEXT + BULLETS ============ -->
+  <section class="slide" data-label="Scale in numbers">
+    <div class="hdr">
+      <div class="sec">§ 01 · The problem</div>
+      <div class="tag">01 · SCALE</div>
+    </div>
+    <div class="main">
+      <div class="eyebrow">The ATLAS Big Data Problem</div>
+      <h2 style="margin-top:18px;">Framing the computational challange:</h2>
+      <div class="rule-blue" style="margin-top:28px;"></div>
+
+      <ul class="bullets" style="margin-top:16px;">
+        <li><b>A new event every 25 ns.</b>
+          <span class="sub">Every event needs to be understood in some form to make a save/discard decision</span>
+        </li>
+        <li><b><span class="accent">o(10^5) features</span> to process and reconstruct into o(1000) physics objects.</b>
+          <span class="sub">More data per second than most data centers store in a year.</span>
+        <li><b>The computing farm needs to process <span class="accent">~200 GB/s</span>.</b>
+          <span class="sub">More data per second than most data centers store in a year.</span>
+        </li>
+        <li><b>Budget for a decision: <span class="accent">200 ms</span>.</b>
+          <span class="sub">Online processing farm &rArr; <span class="accent">40.000 cores</span></span>
+        </li>
+        <li><b>Errors are <span class="accent">lossy and permanent</span>.</b>
+          <span class="sub">Every rejected event is gone forever.</span>
+        </li>
+      </ul>
+      <p style="margin-top:50px; text-align:center; font-size:var(--h3); font-weight:600; color:var(--ink);">
+        Extraordinary Real-Time Reconstruction Task &rArr; large C++ codebase<br>
+        Tight latency budget &rArr; coding engineered for <span style="color:#0369a1;"> and efficiency</span>
+      </p>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 50%;"></span><span class="num">09 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 10 ATHENA ============ -->
+  <section class="slide" data-label="Context">
+    <div class="hdr">
+      <div class="sec">§ 01 · Our Setting</div>
+      <div class="tag">CONTEXT</div>
+    </div>
+    <div class="main">
+      <div class="two-col asym">
+        <div class="col">
+          <span class="eyebrow" style="font-size:100px; letter-spacing:-0.03em;">The ATHENA Codebase</span>
+          <ul style="margin-top:24px; max-width:700px; padding-left:24px; font-size:var(--medium); line-height:1.9;">
+            <li>More than 5 million lines of code.</li>
+            <li>All-encompassing software codebase for ATLAS (including Trigger)</li>
+            <li>Written in C++ with python job configuration.</li>
+            <li>Optimized for Multi-Threaded computation.</li>
+          </ul>
+          <p style="margin-top:120px; text-align:center; font-size:50px; color:var(--accent);">
+            Core principle &rArr; Computational <u>efficiency</u>
+          </p>
+        </div>
+        <div class="col" style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+          <img src="uploads/athena.png"
+               style="width:100%; height:900px; object-fit:contain; object-position:center;"
+               alt="ATHENA">
+        </div>
+      </div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 56%;"></span><span class="num">10 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 11 SECTION DIVIDER 2 ============ -->
+  <section class="slide divider" data-label="§2 Architecture">
+    <div class="hdr">
+      <div class="sec">§ 02 · Pills</div>
+      <div class="tag">DIVIDER</div>
+    </div>
+    <div class="main">
+      <div class="sec-num">PART TWO — 12 MINUTES</div>
+      <h2>Pills of computational<br/>efficiency.</h2>
+      <div class="dek">Every line matters.
+      The key is choosing where to spend time.</div>
+      <div id="divider-motif-2" style="position:absolute; right: 96px; top: 50%; transform: translateY(-50%); width: 520px; height: 520px; opacity: 0.9;"></div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 61%;"></span><span class="num">11 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 08 TWO COLUMN ============ -->
+  <section class="slide" data-label="Pipeline">
+    <div class="hdr">
+      <div class="sec">§ 02 · Pills</div>
+      <div class="tag">02 · PIPELINE</div>
+    </div>
+    <div class="main">
+      <div class="two-col asym">
+        <div class="col" style="display:flex; flex-direction:column;">
+          <span class="eyebrow">The most important principle</span>
+          <h3 style="margin-top:14px;"><span style="color:#0ea5e9;font-size:70px"><b>MEMORY</b></span></h3>
+          <p style="margin-top:-20px; font-size:var(--h3); color:var(--ink-mute); font-style:italic; font-weight:400;">making or breaking efficiency</p>
+          <ul style="margin-top:20px; max-width:900px; padding-left:24px; font-size:var(--large); line-height:1.9;">
+            <li>Executig any process requries memory access.</li>
+            <li>Not all memory costs the same:</li>
+              <ul style="margin-top:4px; padding-left:24px;">
+                <li>Register memory is already on hardware components <span style="color:#0ea5e9;">(free!)</span></li>
+                <li>Cached memory lives on the processing chip <span style="color:#0ea5e9;">(cheap!)</span></li>
+                <li>RAM memory is separate from CPU chip &rArr; <span style="color:#0ea5e9;">costly to access frequently!</span> </li>
+              </ul>
+              <li>While the process waits for memory, dependent operatins stall <spam style="color:#0EA5E9">&rArr; bottleneck</spam></li>
+              <li>Cache vs RAM access is determined by <br><spam style="color:#0EA5E9">&rArr; usage patterns</spam></li>
+          </ul>
+
+        </div>
+
+        <div class="col" style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start;">
+          <img src="uploads/MemoryHierarchy.png"
+               style="width:100%; height:700px; object-fit:contain; object-position:center;"
+               alt="">
+        </div>
+      </div>
+      <p style="margin-top:-200px; text-align:center; font-size:var(--h3); font-weight:600; color:var(--ink);">
+        It's easy to mitigate memory-access bottlenecks! <br>
+        Let's go through some quick & simple <span style="color:#0369a1;"> memory management tips!</span>
+      </p>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 67%;"></span><span class="num">12 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 09 CODE SNIPPET ============ -->
+  <section class="slide" data-label="Hot loop">
+    <div class="hdr">
+      <div class="sec">§ 03 · Hot loop</div>
+      <div class="tag">03 · C++20</div>
+    </div>
+    <div class="main">
+      <div class="eyebrow">Three rules: preallocate · SoA · branch-free</div>
+      <h3 style="margin-top:12px;">The inner loop that runs <span class="accent">10<sup>5</sup> times per second</span>.</h3>
+
+      <div style="margin-top:24px;">
+        <div class="code-head">
+          <span class="file">src/trigger/select_tracks.cpp</span>
+          <span>C++20 · -O3 -march=native · Hot path</span>
+        </div>
+<div class="code"><span class="ln"> 1</span><span class="cm">// Structure-of-Arrays — one cache line per 8 tracks</span>
+<span class="ln"> 2</span><span class="kw">struct</span> <span class="ty">TrackSoA</span> { std::span&lt;<span class="kw">const float</span>&gt; pt, eta, phi, chi2; };
+<span class="ln"> 3</span>
+<span class="ln"> 4</span><span class="kw">void</span> <span class="fn">select</span>(<span class="kw">const</span> <span class="ty">TrackSoA</span>&amp; t, <span class="ty">DecisionBuffer</span>&amp; out) <span class="kw">noexcept</span> {
+<span class="ln"> 5</span>   <span class="kw">const</span> <span class="kw">auto</span> n = t.pt.size();
+<span class="ln"> 6</span>   out.reset();                         <span class="cm">// reuse preallocated storage</span>
+<span class="ln"> 7</span>
+<span class="ln"> 8</span>   <span class="cm">// Vectorizes cleanly: no data-dependent branches inside.</span>
+<span class="ln"> 9</span>   <span class="kw">for</span> (<span class="kw">std::size_t</span> i = 0; i &lt; n; ++i) {
+<span class="ln">10</span>     <span class="kw">const float</span> score  = t.pt[i] * (<span class="st">1.0f</span> - t.chi2[i] * <span class="st">0.1f</span>);
+<span class="ln">11</span>     <span class="kw">const bool</span>  keep   = (score &gt; kThresh) &amp; (<span class="fn">abs</span>(t.eta[i]) &lt; <span class="st">2.5f</span>);
+<span class="ln">12</span>     out.mask[i] = keep;                <span class="cm">// write, don't branch</span>
+<span class="ln">13</span>   }
+<span class="ln">14</span>
+<span class="ln">15</span>   <span class="cm">// Compact in a second, predictable pass.</span>
+<span class="ln">16</span>   out.<span class="fn">compact</span>(t, <span class="ty">Policy</span>::<span class="fn">KeepOrdering</span>);
+<span class="ln">17</span>}</div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 24px;">
+        <div>
+          <div class="eyebrow" style="color: var(--ink-mute);">①  Preallocate</div>
+          <p style="font-size: 18px; margin-top: 8px;">No <span class="mono">malloc</span> in the loop. Ever. Buffers live for the lifetime of the process.</p>
+        </div>
+        <div>
+          <div class="eyebrow" style="color: var(--ink-mute);">②  SoA layout</div>
+          <p style="font-size: 18px; margin-top: 8px;">One field per stream of bytes. The compiler auto-vectorizes across 8–16 tracks.</p>
+        </div>
+        <div>
+          <div class="eyebrow" style="color: var(--ink-mute);">③  Branch-free</div>
+          <p style="font-size: 18px; margin-top: 8px;">Compute a mask, write a mask, compact later. Predictable = fast.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 72%;"></span><span class="num">13 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 10 SECTION DIVIDER 3 ============ -->
+  <section class="slide divider" data-label="§3 Algorithms">
+    <div class="hdr">
+      <div class="sec">§ 03 · Algorithms</div>
+      <div class="tag">DIVIDER</div>
+    </div>
+    <div class="main">
+      <div class="sec-num">PART THREE — 12 MINUTES</div>
+      <h2>Hits become tracks.<br/>Tracks become decisions.</h2>
+      <div class="dek">The pattern-recognition core — where physics,
+      combinatorics, and cache geometry meet.</div>
+      <div id="divider-motif-3" style="position:absolute; right: 96px; top: 50%; transform: translateY(-50%); width: 520px; height: 520px; opacity: 0.9;"></div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 78%;"></span><span class="num">14 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 11 ALGORITHM / PSEUDOCODE ============ -->
+  <section class="slide" data-label="Track finding">
+    <div class="hdr">
+      <div class="sec">§ 03 · Algorithms</div>
+      <div class="tag">04 · TRACK-FINDING</div>
+    </div>
+    <div class="main">
+      <div class="eyebrow">Cellular-automaton track seeding</div>
+      <h3 style="margin-top:12px;">From detector hits $\{h_i\}$ to candidate tracks $\{T_k\}$.</h3>
+
+      <div class="algo-layout" style="margin-top: 28px;">
+        <div class="pane">
+          <h4>Pseudocode · kernel</h4>
+          <div class="pcode">
+<span class="line"><span class="n">1</span><span class="kw">input</span>  H = {h₁, …, hₙ}  <span class="cm"># hits, grouped by layer</span></span>
+<span class="line"><span class="n">2</span><span class="kw">output</span> T           <span class="cm"># accepted tracks</span></span>
+<span class="line"><span class="n">3</span></span>
+<span class="line"><span class="n">4</span><span class="kw">for each</span> layer pair (ℓ, ℓ+1):</span>
+<span class="line"><span class="n">5</span><span class="ind"></span><span class="kw">build</span> doublets  D ← {(a,b) | a∈ℓ, b∈ℓ+1,</span>
+<span class="line"><span class="n">6</span><span class="ind"></span><span class="ind"></span>                    &nbsp;&nbsp;&nbsp;|Δφ| &lt; δ_φ ∧ |Δη| &lt; δ_η}</span>
+<span class="line"><span class="n">7</span></span>
+<span class="line"><span class="n">8</span><span class="kw">for each</span> triplet of adjacent layers:</span>
+<span class="line"><span class="n">9</span><span class="ind"></span><span class="kw">link</span> compatible doublets → seeds S</span>
+<span class="line"><span class="n">10</span><span class="ind"></span>state[s] ← 1  <span class="kw">for each</span> s ∈ S</span>
+<span class="line"><span class="n">11</span></span>
+<span class="line"><span class="n">12</span><span class="kw">repeat</span> until fixed point:   <span class="cm"># automaton</span></span>
+<span class="line"><span class="n">13</span><span class="ind"></span><span class="kw">for each</span> s: state[s] ← max neighbor + 1</span>
+<span class="line"><span class="n">14</span></span>
+<span class="line"><span class="n">15</span><span class="kw">for each</span> maximal chain s* of length ≥ L:</span>
+<span class="line"><span class="n">16</span><span class="ind"></span>T ← T ∪ <span class="kw">fit</span>(s*)  <span class="cm"># Kalman, one pass</span></span>
+<span class="line"><span class="n">17</span></span>
+<span class="line"><span class="n">18</span><span class="kw">return</span> {t ∈ T | χ²(t)/ndf &lt; τ}</span>
+          </div>
+        </div>
+
+        <div class="pane">
+          <h4>Complexity &amp; cost model</h4>
+          <div class="math-feature" style="font-size: 26px; padding: 18px 0;">
+            $$C(n) \;=\; \underbrace{\alpha\, n}_{\text{seed}} \;+\; \underbrace{\beta\, n \log n}_{\text{link}} \;+\; \underbrace{\gamma\, k\, L}_{\text{fit}}$$
+          </div>
+
+          <p style="font-size: 19px; color: var(--ink-mute); max-width: 520px; margin-top: 8px;">
+            With $k$ candidate chains of length $L$. In practice the constant
+            $\alpha$ dominates: <span class="accent">90% of wall time lives in doublet building</span>.
+          </p>
+
+          <div class="rule-thin" style="margin: 18px 0;"></div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div>
+              <div class="eyebrow" style="color: var(--ink-mute);">Typical inputs</div>
+              <p class="mono" style="font-size: 17px; margin-top: 6px;">n ≈ 10<sup>4</sup> hits<br/>L = 8 layers<br/>k ≈ 200 chains</p>
+            </div>
+            <div>
+              <div class="eyebrow" style="color: var(--ink-mute);">Target · p99</div>
+              <p class="mono" style="font-size: 17px; margin-top: 6px; color: var(--accent-ink);">≤ 1.8 μs / event</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 83%;"></span><span class="num">15 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 12 COMPARISON ============ -->
+  <section class="slide" data-label="Offline vs real-time">
+    <div class="hdr">
+      <div class="sec">§ 04 · Compared</div>
+      <div class="tag">05 · A/B</div>
+    </div>
+    <div class="main">
+      <div class="eyebrow">Same physics goal · very different constraints</div>
+      <h2 style="margin-top:14px;">Offline <span style="color: var(--ink-mute); font-weight:400; font-style:italic;">vs.</span> <span class="accent">real-time</span>.</h2>
+      <div class="rule-blue" style="margin-top:24px;"></div>
+
+      <table class="cmp" style="margin-top: 24px;">
+        <thead>
+          <tr>
+            <th style="width:220px;">Dimension</th>
+            <th>Offline analysis</th>
+            <th>Real-time analysis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label">Latency budget</td>
+            <td>minutes — hours (per job)</td>
+            <td class="pos">≤ 4 μs (per event)</td>
+          </tr>
+          <tr>
+            <td class="label">Input completeness</td>
+            <td>Full event, any order, re-playable</td>
+            <td class="pos">Partial state, streaming, once</td>
+          </tr>
+          <tr>
+            <td class="label">Memory model</td>
+            <td>GC'd, dynamic, large working sets</td>
+            <td class="pos">Preallocated, bounded, RAII-owned</td>
+          </tr>
+          <tr>
+            <td class="label">Error recovery</td>
+            <td>Retry, reprocess, diff</td>
+            <td class="pos">No retry — an error is a lost event</td>
+          </tr>
+          <tr>
+            <td class="label">Primary language</td>
+            <td>Python, with C++ kernels</td>
+            <td class="pos">C++20, occasionally FPGA / GPU</td>
+          </tr>
+          <tr>
+            <td class="label">Observability</td>
+            <td>Log, plot, iterate</td>
+            <td class="pos">Histograms in-loop; lock-free counters</td>
+          </tr>
+          <tr>
+            <td class="label">Optimizes for</td>
+            <td>Precision, flexibility</td>
+            <td class="pos">Throughput, tail latency, determinism</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 89%;"></span><span class="num">16 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 13 TAKEAWAYS ============ -->
+  <section class="slide" data-label="Takeaways">
+    <div class="hdr">
+      <div class="sec">§ 05 · Recap</div>
+      <div class="tag">06 · TAKEAWAYS</div>
+    </div>
+    <div class="main">
+      <div class="eyebrow">Three mental models to carry forward</div>
+      <h2 style="margin-top:14px;">What to take home.</h2>
+      <div class="rule-blue" style="margin-top:28px;"></div>
+
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 56px; margin-top: 36px;">
+        <div>
+          <div class="mono accent" style="font-size: 20px; letter-spacing: 0.06em;">IDEA · 01</div>
+          <h3 style="margin-top: 14px; font-size: 34px;">Every microsecond is a budget line.</h3>
+          <p style="margin-top: 18px; font-size: 20px;">Design backwards from the latency budget. If a feature doesn't fit, it doesn't ship — it moves offline.</p>
+        </div>
+        <div>
+          <div class="mono accent" style="font-size: 20px; letter-spacing: 0.06em;">IDEA · 02</div>
+          <h3 style="margin-top: 14px; font-size: 34px;">Predictability beats cleverness.</h3>
+          <p style="margin-top: 18px; font-size: 20px;">Branch-free, allocation-free, data-independent code wins against asymptotically-better alternatives at this scale.</p>
+        </div>
+        <div>
+          <div class="mono accent" style="font-size: 20px; letter-spacing: 0.06em;">IDEA · 03</div>
+          <h3 style="margin-top: 14px; font-size: 34px;">Physics constraints are architecture.</h3>
+          <p style="margin-top: 18px; font-size: 20px;">The detector geometry determines the memory layout. Stop fighting it — let it shape the types.</p>
+        </div>
+      </div>
+
+      <div class="rule-thin" style="margin-top: 48px;"></div>
+
+      <div style="display:flex; gap: 24px; align-items: center; font-family: var(--mono); font-size: 16px; color: var(--ink-mute);">
+        <span class="pill">Homework · due next week</span>
+        <span>Clone <span class="accent mono">rta-lhc-lectures</span> and make <span class="mono">bench/select.cpp</span> run 2× faster on your laptop.</span>
+      </div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 94%;"></span><span class="num">17 / 18</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 14 Q&A ============ -->
+  <section class="slide" data-label="Q&amp;A">
+    <div class="hdr">
+      <div class="sec">§ Q&amp;A</div>
+      <div class="tag">12 · END</div>
+    </div>
+    <div class="main">
+      <div class="qa">
+        <div>
+          <div class="eyebrow">Over to you</div>
+          <div class="qa-big" style="margin-top: 24px;">Questions<span class="q">?</span></div>
+          <p style="font-size: 24px; color: var(--ink-mute); max-width: 900px; margin-top: 12px;">
+            If you'd rather ask one later — I'll stay for as long as there's coffee,
+            and the links below work from anywhere.
+          </p>
+        </div>
+        <div class="contact">
+          <div>
+            <div class="k">Email</div>
+            <div>montella.4@osu.edu</div>
+          </div>
+          <div>
+            <div class="k"></div>
+            <div></div>
+          </div>
+          <div>
+            <div class="k">Office hours</div>
+            <div>Thu 15:00–17:00 · PRB 4048</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="qa-strand" style="position:absolute; right: 96px; top: 96px; width: 500px; height: 120px; opacity: 0.7;"></div>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 100%;"></span><span class="num">18 / 18</span></div>
+    </div>
+  </section>
+
+</deck-stage>
+
+<!-- ============ TWEAKS PANEL ============ -->
+<div class="tweaks-panel" id="tweaks">
+  <h5>Tweaks</h5>
+
+  <label>
+    <span class="lab"><span>Accent blue</span><span id="accent-hex" class="mono">—</span></span>
+    <div class="swatches" id="accent-swatches">
+      <button data-c="#0EA5E9" style="background:#0EA5E9"></button>
+      <button data-c="#2563EB" style="background:#2563EB"></button>
+      <button data-c="#1E40AF" style="background:#1E40AF"></button>
+      <button data-c="#0B3D91" style="background:#0B3D91"></button>
+      <button data-c="#1B2A4E" style="background:#1B2A4E"></button>
+    </div>
+  </label>
+
+  <label>
+    <span class="lab"><span>Font pairing</span></span>
+    <select id="font-pair">
+      <option value="inter-jb">Inter · JetBrains Mono</option>
+      <option value="plex">IBM Plex Sans · Plex Mono</option>
+      <option value="serif">Plex Serif · JetBrains Mono</option>
+      <option value="grotesk">Space Grotesk · JetBrains Mono</option>
+    </select>
+  </label>
+
+  <label>
+    <span class="lab"><span>Density</span></span>
+    <select id="density">
+      <option value="balanced">Balanced</option>
+      <option value="spare">Spare</option>
+      <option value="dense">Dense</option>
+    </select>
+  </label>
+
+  <div class="toggle">
+    <span>Show motif</span>
+    <input type="checkbox" id="motif-on" checked />
+  </div>
+  <div class="toggle">
+    <span>Dark mode</span>
+    <input type="checkbox" id="dark-on" />
+  </div>
+</div>
+
+<!-- Preserve defaults block for __edit_mode persistence -->
+<script>
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "accent": "#0EA5E9",
+    "fontPair": "inter-jb",
+    "density": "balanced",
+    "motif": true,
+    "dark": true
+  }/*EDITMODE-END*/;
+</script>
+
+<script>
+/* ---------- Motif rendering ---------- */
+function renderMotifs() {
+  const cover = document.getElementById('cover-motif');
+  if (cover) cover.innerHTML = window.Motifs.detectorSVG({
+    size: 780, seed: 14, rings: 8, nTracks: 5,
+    angularJitter: 0.55, radialJitter: 0.14
+  });
+  const d1 = document.getElementById('divider-motif-1');
+  if (d1) d1.innerHTML = window.Motifs.graphSVG({
+    width: 520, height: 520, cols: 8, rows: 8, seed: 3,
+    jitter: 0.3, connectK: 2, highlightFrac: 0.2,
+    nodeR: 2.6, blueR: 4.4, edgeOpacity: 0.2
+  });
+  const d2 = document.getElementById('divider-motif-2');
+  if (d2) d2.innerHTML = window.Motifs.graphSVG({
+    width: 520, height: 520, cols: 10, rows: 6, seed: 17,
+    jitter: 0.38, connectK: 2, highlightFrac: 0.22,
+    nodeR: 2.6, blueR: 4.4, edgeOpacity: 0.2
+  });
+  const d3 = document.getElementById('divider-motif-3');
+  if (d3) d3.innerHTML = window.Motifs.graphSVG({
+    width: 520, height: 520, cols: 9, rows: 9, seed: 29,
+    jitter: 0.32, connectK: 3, highlightFrac: 0.16,
+    nodeR: 2.6, blueR: 4.4, edgeOpacity: 0.18
+  });
+  const qs = document.getElementById('qa-strand');
+  if (qs) qs.innerHTML = window.Motifs.strandSVG({
+    width: 500, height: 120, n: 18, seed: 9, nodeR: 3, blueEvery: 4
+  });
+
+  // White-on-dark dividers — flip fill for the inline circles
+  document.querySelectorAll('.divider .motif circle:not(.b)').forEach(c => c.setAttribute('fill', 'rgba(255,255,255,0.55)'));
+  document.querySelectorAll('.divider .motif line:not(.b)').forEach(l => l.setAttribute('stroke', 'rgba(255,255,255,0.35)'));
+}
+renderMotifs();
+
+/* ---------- Tweaks ---------- */
+const state = { ...TWEAK_DEFAULTS };
+
+function applyAccent(c) {
+  document.documentElement.style.setProperty('--accent', c);
+  // darker ink version for accessible text on white — shift lightness
+  const accentInks = {
+    '#0EA5E9': '#0369a1',
+    '#2563EB': '#1d4ed8',
+    '#1E40AF': '#1e3a8a',
+    '#0B3D91': '#0a2f73',
+    '#1B2A4E': '#111d37'
+  };
+  document.documentElement.style.setProperty('--accent-ink', accentInks[c] || c);
+  document.documentElement.style.setProperty('--accent-soft', hexToRgba(c, 0.10));
+  document.documentElement.style.setProperty('--accent-line', hexToRgba(c, 0.35));
+  document.getElementById('accent-hex').textContent = c;
+  document.querySelectorAll('#accent-swatches button').forEach(b => {
+    b.toggleAttribute('data-on', b.dataset.c === c);
+  });
+  // re-render motifs so blue nodes update
+  renderMotifs();
+}
+
+function hexToRgba(hex, a) {
+  const n = hex.replace('#','');
+  const r = parseInt(n.slice(0,2),16), g=parseInt(n.slice(2,4),16), b=parseInt(n.slice(4,6),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+function applyFontPair(v) {
+  const map = {
+    'inter-jb':  ['Inter', 'JetBrains Mono'],
+    'plex':      ['IBM Plex Sans', 'IBM Plex Mono, JetBrains Mono'],
+    'serif':     ['IBM Plex Serif', 'JetBrains Mono'],
+    'grotesk':   ['Space Grotesk', 'JetBrains Mono']
+  };
+  const [sans, mono] = map[v] || map['inter-jb'];
+  document.documentElement.style.setProperty('--sans', `"${sans}", ui-sans-serif, system-ui, sans-serif`);
+  document.documentElement.style.setProperty('--mono', `"${mono.split(',')[0]}", ${mono.includes(',') ? mono.split(',').slice(1).join(',') + ',' : ''} ui-monospace, monospace`);
+  document.getElementById('font-pair').value = v;
+}
+
+function applyDensity(v) {
+  document.body.classList.remove('density-spare', 'density-balanced', 'density-dense');
+  document.body.classList.add('density-' + v);
+  document.getElementById('density').value = v;
+}
+
+function applyMotif(on) {
+  document.body.classList.toggle('no-motif', !on);
+  document.getElementById('motif-on').checked = on;
+}
+
+function applyDark(on) {
+  document.body.classList.toggle('dark-mode', on);
+  document.getElementById('dark-on').checked = on;
+}
+
+function applyAll() {
+  applyAccent(state.accent);
+  applyFontPair(state.fontPair);
+  applyDensity(state.density);
+  applyMotif(state.motif);
+  applyDark(state.dark);
+}
+
+applyAll();
+
+/* Bindings */
+document.getElementById('accent-swatches').addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  state.accent = b.dataset.c; applyAccent(state.accent);
+  persist({ accent: state.accent });
+});
+document.getElementById('font-pair').addEventListener('change', (e) => {
+  state.fontPair = e.target.value; applyFontPair(state.fontPair);
+  persist({ fontPair: state.fontPair });
+});
+document.getElementById('density').addEventListener('change', (e) => {
+  state.density = e.target.value; applyDensity(state.density);
+  persist({ density: state.density });
+});
+document.getElementById('motif-on').addEventListener('change', (e) => {
+  state.motif = e.target.checked; applyMotif(state.motif);
+  persist({ motif: state.motif });
+});
+document.getElementById('dark-on').addEventListener('change', (e) => {
+  state.dark = e.target.checked; applyDark(state.dark);
+  persist({ dark: state.dark });
+});
+
+function persist(edits) {
+  try { window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*'); } catch (e) {}
+}
+
+/* Tweaks panel toggle (host-driven) */
+window.addEventListener('message', (e) => {
+  const d = e.data || {};
+  if (d.type === '__activate_edit_mode') {
+    document.getElementById('tweaks').setAttribute('data-open', '');
+  } else if (d.type === '__deactivate_edit_mode') {
+    document.getElementById('tweaks').removeAttribute('data-open');
+  }
+});
+try { window.parent.postMessage({ type: '__edit_mode_available' }, '*'); } catch (e) {}
+</script>
+
+</body>
+</html>

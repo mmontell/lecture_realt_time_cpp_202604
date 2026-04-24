@@ -1,0 +1,38 @@
+TY  - JOUR
+AU  - ATLAS Collaboration
+TI  - Search for electroweak-scale dijet resonances using trigger-level analysis with the ATLAS detector in 132 fb-1 of pp collisions at sqrt(s) = 13 TeV
+JO  - Physical Review D
+VL  - 112
+IS  - 9
+SP  - 092015
+PY  - 2025
+DO  - 10.1103/15p2-bkg8
+AN  - arXiv:2509.01219
+UR  - https://journals.aps.org/prd/abstract/10.1103/15p2-bkg8
+AB  - This article reports on a search for dijet resonances using 132 fb-1 of pp collision data recorded at sqrt(s) = 13 TeV by the ATLAS detector at the Large Hadron Collider. The search is performed solely on jets reconstructed within the ATLAS trigger to overcome bandwidth limitations imposed on conventional single-jet triggers, which would otherwise reject data from decays of sub-TeV dijet resonances. Collision events with two jets satisfying transverse momentum thresholds of pT >= 85 GeV and jet rapidity separation of |y*| < 0.6 are analysed for dijet resonances with invariant masses from 375 to 1800 GeV. A data-driven background estimate is used to model the dijet mass distribution from multijet processes. No significant excess above the expected background is observed. Upper limits are set at 95% confidence level on coupling values for a benchmark leptophobic axial-vector Z' model and on the production cross section for a new resonance contributing a Gaussian-distributed line-shape to the dijet mass distribution.
+KW  - ATLAS
+KW  - trigger-level analysis
+KW  - TLA
+KW  - dijet resonances
+KW  - LHC
+KW  - BSM
+ER  - 
+
+TY  - JOUR
+AU  - ATLAS Collaboration
+TI  - The ATLAS Trigger System for LHC Run 3 and Trigger performance in 2022
+JO  - Journal of Instrumentation
+VL  - 19
+IS  - 6
+SP  - P06029
+PY  - 2024
+DO  - 10.1088/1748-0221/19/06/P06029
+AN  - arXiv:2401.06630
+UR  - https://inspirehep.net/literature/2746398
+AB  - The ATLAS trigger system is a crucial component of the ATLAS experiment at the LHC. It is responsible for selecting events in line with the ATLAS physics programme. This paper presents an overview of the changes to the trigger and data acquisition system during the second long shutdown of the LHC, and shows the performance of the trigger system and its components in the proton-proton collisions during the 2022 commissioning period as well as its expected performance in proton-proton and heavy-ion collisions for the remainder of the third LHC data-taking period (2022-2025).
+KW  - ATLAS
+KW  - trigger
+KW  - TDAQ
+KW  - LHC Run 3
+KW  - HLT
+ER  - 
