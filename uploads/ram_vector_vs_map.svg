@@ -1,0 +1,314 @@
+<svg width="1320" height="740" viewBox="0 0 1320 740" xmlns="http://www.w3.org/2000/svg" style="background:white;font-family:'Helvetica Neue',Arial,sans-serif;">
+<title>RAM layout: std::vector (contiguous) vs std::map/list (scattered)</title>
+<desc>Two side-by-side RAM diagrams. Left: std::vector with 6 floats packed into one cache line, shown in orange. Right: std::map/list with 6 nodes scattered across different cache lines, each requiring a separate RAM fetch.</desc>
+
+<defs>
+  <marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M1 1L9 5L1 9" fill="none" stroke="#2E7D32" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M1 1L9 5L1 9" fill="none" stroke="#C62828" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M1 1L9 5L1 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<!-- ═══════════════════════════════════════════
+     LEFT PANEL — std::vector
+═══════════════════════════════════════════ -->
+
+<!-- Panel title -->
+<text x="330" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#1A1A1A">std::vector  (reserved)</text>
+<text x="330" y="62" text-anchor="middle" font-size="15" fill="#555">6 floats — one contiguous block</text>
+
+<!-- RAM label + border -->
+<rect x="148" y="80" width="364" height="560" rx="14" fill="none" stroke="#BDBDBD" stroke-width="1.5"/>
+<text x="330" y="104" text-anchor="middle" font-size="15" font-weight="600" fill="#444">RAM</text>
+
+<!-- Cache line label callout (top right) -->
+<text x="524" y="128" font-size="13" fill="#444" text-anchor="start">Cache Line</text>
+<text x="524" y="146" font-size="13" fill="#444" text-anchor="start">64 bytes</text>
+<path d="M522 136 Q498 136 490 148" fill="none" stroke="#888" stroke-width="1.2" marker-end="url(#arr-gray)"/>
+
+<!-- helper macro: cache line row = pill at (rx,ry) width=340 -->
+<!-- ROW 1: empty -->
+<rect x="160" y="112" width="340" height="46" rx="23" fill="#5BB3D0" stroke="none"/>
+<rect x="170" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="207" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="244" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="281" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="318" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="355" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="392" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="429" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<!-- "Occupied" / "Free" labels -->
+<line x1="516" y1="202" x2="502" y2="202" stroke="#888" stroke-width="1"/>
+<text x="519" y="206" font-size="13" fill="#555">Occupied</text>
+<line x1="516" y1="248" x2="502" y2="248" stroke="#888" stroke-width="1"/>
+<text x="519" y="252" font-size="13" fill="#555">Free</text>
+
+<!-- ROW 2: empty -->
+<rect x="160" y="168" width="340" height="46" rx="23" fill="#5BB3D0" stroke="none"/>
+<rect x="170" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="207" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="244" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="281" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="318" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="355" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="392" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="429" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+
+<!-- ROW 3: partially free -->
+<rect x="160" y="224" width="340" height="46" rx="23" fill="#5BB3D0" stroke="none"/>
+<rect x="170" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="207" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="244" y="232" width="30" height="30" rx="6" fill="#E8956D"/>
+<rect x="281" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="318" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="355" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="392" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="429" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+
+<!-- ROW 4: THE VECTOR ROW — all 6 floats + 2 empty = contiguous block -->
+<rect x="160" y="280" width="340" height="46" rx="23" fill="#5BB3D0" stroke="#2E7D32" stroke-width="2.5"/>
+<rect x="170" y="288" width="30" height="30" rx="6" fill="#E8956D"/>
+<text x="185" y="308" text-anchor="middle" font-size="9" font-weight="700" fill="#7B3A10">1.0</text>
+<rect x="207" y="288" width="30" height="30" rx="6" fill="#E8956D"/>
+<text x="222" y="308" text-anchor="middle" font-size="9" font-weight="700" fill="#7B3A10">2.0</text>
+<rect x="244" y="288" width="30" height="30" rx="6" fill="#E8956D"/>
+<text x="259" y="308" text-anchor="middle" font-size="9" font-weight="700" fill="#7B3A10">3.0</text>
+<rect x="281" y="288" width="30" height="30" rx="6" fill="#E8956D"/>
+<text x="296" y="308" text-anchor="middle" font-size="9" font-weight="700" fill="#7B3A10">4.0</text>
+<rect x="318" y="288" width="30" height="30" rx="6" fill="#E8956D"/>
+<text x="333" y="308" text-anchor="middle" font-size="9" font-weight="700" fill="#7B3A10">5.0</text>
+<rect x="355" y="288" width="30" height="30" rx="6" fill="#E8956D"/>
+<text x="370" y="308" text-anchor="middle" font-size="9" font-weight="700" fill="#7B3A10">6.0</text>
+<rect x="392" y="288" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="429" y="288" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+
+<!-- ONE cache-line bracket for the vector row -->
+<line x1="170" y1="336" x2="385" y2="336" stroke="#2E7D32" stroke-width="1.2"/>
+<line x1="170" y1="332" x2="170" y2="340" stroke="#2E7D32" stroke-width="1.2"/>
+<line x1="385" y1="332" x2="385" y2="340" stroke="#2E7D32" stroke-width="1.2"/>
+<text x="277" y="352" text-anchor="middle" font-size="12" fill="#2E7D32" font-weight="600">all 6 values in one cache line</text>
+
+<!-- ROW 5: empty -->
+<rect x="160" y="364" width="340" height="46" rx="23" fill="#5BB3D0" stroke="none"/>
+<rect x="170" y="372" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="207" y="372" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="244" y="372" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="281" y="372" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="318" y="372" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="355" y="372" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="392" y="372" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="429" y="372" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+
+<!-- ROW 6: empty -->
+<rect x="160" y="420" width="340" height="46" rx="23" fill="#5BB3D0" stroke="none"/>
+<rect x="170" y="428" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="207" y="428" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="244" y="428" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="281" y="428" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="318" y="428" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="355" y="428" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="392" y="428" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="429" y="428" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+
+<!-- ROW 7: empty -->
+<rect x="160" y="476" width="340" height="46" rx="23" fill="#5BB3D0" stroke="none"/>
+<rect x="170" y="484" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="207" y="484" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="244" y="484" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="281" y="484" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="318" y="484" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="355" y="484" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="392" y="484" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="429" y="484" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+
+<!-- ROW 8: empty -->
+<rect x="160" y="532" width="340" height="46" rx="23" fill="#5BB3D0" stroke="none"/>
+<rect x="170" y="540" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="207" y="540" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="244" y="540" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="281" y="540" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="318" y="540" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="355" y="540" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="392" y="540" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="429" y="540" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+
+<!-- ROW 9: empty -->
+<rect x="160" y="588" width="340" height="46" rx="23" fill="#5BB3D0" stroke="none"/>
+<rect x="170" y="596" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="207" y="596" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="244" y="596" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="281" y="596" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="318" y="596" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="355" y="596" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="392" y="596" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="429" y="596" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+
+<!-- HIT label + annotation -->
+<rect x="24" y="288" width="68" height="32" rx="7" fill="#2E7D32"/>
+<text x="58" y="309" text-anchor="middle" font-size="15" font-weight="700" fill="white">Read</text>
+<line x1="92" y1="303" x2="158" y2="303" stroke="#2E7D32" stroke-width="2" marker-end="url(#arr-green)"/>
+
+<text x="24" y="380" text-anchor="start" font-size="13" fill="#2E7D32" font-weight="600">Load 1 cache line.</text>
+<text x="24" y="398" text-anchor="start" font-size="13" fill="#2E7D32">All 6 values arrive</text>
+<text x="24" y="416" text-anchor="start" font-size="13" fill="#2E7D32">together.  Free!</text>
+
+<!-- ═══════════════════════════════════════════
+     DIVIDER
+═══════════════════════════════════════════ -->
+<line x1="660" y1="60" x2="660" y2="700" stroke="#DDDDDD" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+<!-- ═══════════════════════════════════════════
+     RIGHT PANEL — std::map / std::list
+═══════════════════════════════════════════ -->
+
+<text x="990" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#1A1A1A">std::map  /  std::list</text>
+<text x="990" y="62" text-anchor="middle" font-size="15" fill="#555">6 nodes — scattered across heap</text>
+
+<!-- RAM label + border -->
+<rect x="808" y="80" width="364" height="560" rx="14" fill="none" stroke="#BDBDBD" stroke-width="1.5"/>
+<text x="990" y="104" text-anchor="middle" font-size="15" font-weight="600" fill="#444">RAM</text>
+
+<!-- ROW 1: node 1.0 here (value + ptr bytes) -->
+<rect x="820" y="112" width="340" height="46" rx="23" fill="#5BB3D0" stroke="#C62828" stroke-width="2"/>
+<rect x="830" y="120" width="30" height="30" rx="6" fill="#E8956D"/>
+<text x="845" y="140" text-anchor="middle" font-size="9" font-weight="700" fill="#7B3A10">1.0</text>
+<rect x="867" y="120" width="30" height="30" rx="6" fill="#BBBBBB"/>
+<text x="882" y="140" text-anchor="middle" font-size="8" fill="#444">ptr</text>
+<rect x="904" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="941" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="978" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1015" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1052" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1089" y="120" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<text x="1184" y="140" font-size="12" fill="#C62828" font-weight="600">RAM fetch 1</text>
+
+<!-- ROW 2: empty -->
+<rect x="820" y="168" width="340" height="46" rx="23" fill="#5BB3D0" stroke="none"/>
+<rect x="830" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="867" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="904" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="941" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="978" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1015" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1052" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1089" y="176" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+
+<!-- ROW 3: node 3.0 here -->
+<rect x="820" y="224" width="340" height="46" rx="23" fill="#5BB3D0" stroke="#C62828" stroke-width="2"/>
+<rect x="830" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="867" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="904" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="941" y="232" width="30" height="30" rx="6" fill="#E8956D"/>
+<text x="956" y="252" text-anchor="middle" font-size="9" font-weight="700" fill="#7B3A10">3.0</text>
+<rect x="978" y="232" width="30" height="30" rx="6" fill="#BBBBBB"/>
+<text x="993" y="252" text-anchor="middle" font-size="8" fill="#444">ptr</text>
+<rect x="1015" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1052" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1089" y="232" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<text x="1184" y="252" font-size="12" fill="#C62828" font-weight="600">RAM fetch 2</text>
+
+<!-- ROW 4: node 5.0 here -->
+<rect x="820" y="280" width="340" height="46" rx="23" fill="#5BB3D0" stroke="#C62828" stroke-width="2"/>
+<rect x="830" y="288" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="867" y="288" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="904" y="288" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="941" y="288" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="978" y="288" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1015" y="288" width="30" height="30" rx="6" fill="#E8956D"/>
+<text x="1030" y="308" text-anchor="middle" font-size="9" font-weight="700" fill="#7B3A10">5.0</text>
+<rect x="1052" y="288" width="30" height="30" rx="6" fill="#BBBBBB"/>
+<text x="1067" y="308" text-anchor="middle" font-size="8" fill="#444">ptr</text>
+<rect x="1089" y="288" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<text x="1184" y="308" font-size="12" fill="#C62828" font-weight="600">RAM fetch 3</text>
+
+<!-- ROW 5: empty -->
+<rect x="820" y="336" width="340" height="46" rx="23" fill="#5BB3D0" stroke="none"/>
+<rect x="830" y="344" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="867" y="344" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="904" y="344" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="941" y="344" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="978" y="344" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1015" y="344" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1052" y="344" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1089" y="344" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+
+<!-- ROW 6: node 2.0 here -->
+<rect x="820" y="392" width="340" height="46" rx="23" fill="#5BB3D0" stroke="#C62828" stroke-width="2"/>
+<rect x="830" y="400" width="30" height="30" rx="6" fill="#E8956D"/>
+<text x="845" y="420" text-anchor="middle" font-size="9" font-weight="700" fill="#7B3A10">2.0</text>
+<rect x="867" y="400" width="30" height="30" rx="6" fill="#BBBBBB"/>
+<text x="882" y="420" text-anchor="middle" font-size="8" fill="#444">ptr</text>
+<rect x="904" y="400" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="941" y="400" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="978" y="400" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1015" y="400" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1052" y="400" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1089" y="400" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<text x="1184" y="420" font-size="12" fill="#C62828" font-weight="600">RAM fetch 4</text>
+
+<!-- ROW 7: empty -->
+<rect x="820" y="448" width="340" height="46" rx="23" fill="#5BB3D0" stroke="none"/>
+<rect x="830" y="456" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="867" y="456" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="904" y="456" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="941" y="456" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="978" y="456" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1015" y="456" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1052" y="456" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1089" y="456" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+
+<!-- ROW 8: node 6.0 here -->
+<rect x="820" y="504" width="340" height="46" rx="23" fill="#5BB3D0" stroke="#C62828" stroke-width="2"/>
+<rect x="830" y="512" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="867" y="512" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="904" y="512" width="30" height="30" rx="6" fill="#E8956D"/>
+<text x="919" y="532" text-anchor="middle" font-size="9" font-weight="700" fill="#7B3A10">6.0</text>
+<rect x="941" y="512" width="30" height="30" rx="6" fill="#BBBBBB"/>
+<text x="956" y="532" text-anchor="middle" font-size="8" fill="#444">ptr</text>
+<rect x="978" y="512" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1015" y="512" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1052" y="512" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1089" y="512" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<text x="1184" y="532" font-size="12" fill="#C62828" font-weight="600">RAM fetch 5</text>
+
+<!-- ROW 9: node 4.0 here -->
+<rect x="820" y="560" width="340" height="46" rx="23" fill="#5BB3D0" stroke="#C62828" stroke-width="2"/>
+<rect x="830" y="568" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="867" y="568" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="904" y="568" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="941" y="568" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="978" y="568" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<rect x="1015" y="568" width="30" height="30" rx="6" fill="#E8956D"/>
+<text x="1030" y="588" text-anchor="middle" font-size="9" font-weight="700" fill="#7B3A10">4.0</text>
+<rect x="1052" y="568" width="30" height="30" rx="6" fill="#BBBBBB"/>
+<text x="1067" y="588" text-anchor="middle" font-size="8" fill="#444">ptr</text>
+<rect x="1089" y="568" width="30" height="30" rx="6" fill="white" opacity="0.55"/>
+<text x="1184" y="588" font-size="12" fill="#C62828" font-weight="600">RAM fetch 6</text>
+
+<!-- Read arrow + miss label -->
+<rect x="684" y="288" width="72" height="32" rx="7" fill="#C62828"/>
+<text x="720" y="309" text-anchor="middle" font-size="15" font-weight="700" fill="white">Read</text>
+<line x1="756" y1="303" x2="817" y2="303" stroke="#C62828" stroke-width="2" marker-end="url(#arr-red)"/>
+
+<!-- annotation right side bottom -->
+<text x="1184" y="640" font-size="13" fill="#C62828" font-weight="600" text-anchor="start">6 values = 6 separate</text>
+<text x="1184" y="658" font-size="13" fill="#C62828" text-anchor="start">RAM fetches.</text>
+<text x="1184" y="676" font-size="13" fill="#C62828" text-anchor="start">Each up to ~200 cycles.</text>
+
+<!-- ═══════════════════════════════════════════
+     BOTTOM SUMMARY STRIP
+═══════════════════════════════════════════ -->
+<rect x="60" y="666" width="540" height="54" rx="10" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1"/>
+<text x="330" y="688" text-anchor="middle" font-size="13" font-weight="700" fill="#1B5E20">1 RAM fetch  →  all 6 values in cache  →  ~4 cycles each</text>
+<text x="330" y="708" text-anchor="middle" font-size="12" fill="#2E7D32">prefetcher engaged, entire array stays hot</text>
+
+<rect x="720" y="666" width="540" height="54" rx="10" fill="#FFEBEE" stroke="#C62828" stroke-width="1"/>
+<text x="990" y="688" text-anchor="middle" font-size="13" font-weight="700" fill="#B71C1C">6 RAM fetches  →  1 value per fetch  →  up to ~200 cycles each</text>
+<text x="990" y="708" text-anchor="middle" font-size="12" fill="#C62828">prefetcher blind — each pointer leads somewhere unknown</text>
+
+</svg>
