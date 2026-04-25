@@ -2480,11 +2480,18 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
     <div class="main" style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; text-align:center;">
       <p style="margin-top:25px; font-size:var(--body);">We have time for one more principle:</p>
       <h3 style="margin-top:12px;"><span style="color:#0ea5e9; font-size:70px;"><b>BE SMART!</b></span></h3>
-      <p style="margin-top:20px; font-size:var(--body); max-width:1200px;">Algorithmic improvements can speed up your code tens or hundreds of times more than the good coding practices outlined so far!</p>
+      <p style="margin-top:20px; font-size:var(--body); max-width:1600px;">Algorithmic improvements can speed up your code tens or hundreds of times more than the good coding practices outlined so far!</p>
+      <p style="margin-top:20px; font-size:var(--body); max-width:1600px;">Principles:</p>
+      <p style="margin-top:20px; font-size:40px; max-width:1600px;"><span style="color:#0EA5E9">EXIT EARLY</span></p>
+      <p style="margin-top:-20px; font-size:var(--medium); max-width:1600px;">Placing a condition that rejects many loop iterations early saves a lot of time <br> (e.g. not running over an entire sorted array when looking for the closest element)</p>
+      <p style="margin-top:20px; font-size:40px; max-width:1600px;"><span style="color:#0EA5E9">EXIT FAST</span></p>
+      <p style="margin-top:-20px; font-size:var(--medium); max-width:1600px;">The first exit condition will be always computed: make sure it's a quick/cheap operation <br>(At ATLAS, the Trigger follows this principle: L1 &rArr; quick & cheap rejection applied at 40 MHz)</p>
+      <p style="margin-top:20px; font-size:40px; max-width:1600px;"><span style="color:#0EA5E9">LEVERAGE THE PROBLEM STRUCTURE</span></p>
+      <p style="margin-top:-20px; font-size:var(--medium); max-width:1600px;">Generic algorithmic structure can get us so far &rAarr; our knowledge of the problem can help with design choices <br>(e.g. when trying to attach a hit to a proto-track we don't loop over hits on the other side of the detector)</p>
     </div>
     <div class="ftr">
       <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
-      <div class="page"><span class="bar" style="--progress: 82%;"></span><span class="num">23 / 29</span></div>
+      <div class="page"><span class="bar" style="--progress: 77%;"></span><span class="num">23 / 30</span></div>
     </div>
   </section>
 
@@ -2495,7 +2502,7 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
       <div class="tag">03 · C++20</div>
     </div>
     <div class="main">
-      <div class="eyebrow">Three rules: preallocate · SoA · branch-free</div>
+      <div class="eyebrow">Let's put it all together!</div>
       <h3 style="margin-top:12px;">The inner loop that runs <span class="accent">10<sup>5</sup> times per second</span>.</h3>
 
       <div style="margin-top:24px;">
