@@ -1,0 +1,178 @@
+<svg width="1200" height="820" viewBox="0 0 1200 820" xmlns="http://www.w3.org/2000/svg" style="background:#0B0D12;font-family:'Helvetica Neue',Arial,sans-serif;">
+<title>AoS vs SoA cache line utilisation — CalorimeterCell</title>
+<desc>Side-by-side comparison of Array-of-Structs and Struct-of-Arrays memory layouts, showing how cache lines are filled when only the energy field is accessed in a calorimeter cell collection.</desc>
+
+<rect x="60"  y="22" width="14" height="14" rx="3" fill="#D87A55" stroke="#F0997B" stroke-width="0.5"/>
+<text x="82"  y="33" font-size="12" fill="#E8A88A">energy (needed)</text>
+<rect x="216" y="22" width="14" height="14" rx="3" fill="#5B9BD5" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="238" y="33" font-size="12" fill="#A0C4E8">eta (wasted)</text>
+<rect x="330" y="22" width="14" height="14" rx="3" fill="#E8B44A" stroke="#FAC775" stroke-width="0.5"/>
+<text x="352" y="33" font-size="12" fill="#E8C87A">phi (wasted)</text>
+<rect x="440" y="22" width="14" height="14" rx="3" fill="#4DB88C" stroke="#5DCAA5" stroke-width="0.5"/>
+<text x="462" y="33" font-size="12" fill="#7DD4B5">time (wasted)</text>
+<rect x="556" y="22" width="14" height="14" rx="3" fill="#1A1D24" stroke="#3A3D44" stroke-width="0.5"/>
+<text x="578" y="33" font-size="12" fill="#555860">empty</text>
+
+<defs>
+  <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="6" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+  </pattern>
+</defs>
+
+<text x="600" y="80" text-anchor="middle" font-size="20" font-weight="600" fill="#E0E0E0">Array of Structs (AoS) — intuitive coding</text>
+
+<rect x="120" y="96" width="960" height="60" rx="8" fill="#13161D" stroke="#2A2D35" stroke-width="0.5"/>
+<text x="140" y="118" font-family="monospace" font-size="13" fill="#7A8090">struct CalorimeterCell { float eta, phi, time, energy; };  </text>
+<text x="690" y="118" font-family="monospace" font-size="13" fill="#555860">// 16 bytes per cell</text>
+<text x="140" y="140" font-family="monospace" font-size="13" fill="#7A8090">for (auto&amp; c : cells) total += c.energy;                  </text>
+<text x="690" y="140" font-family="monospace" font-size="13" fill="#555860">// only need energy!</text>
+
+<text x="120" y="180" font-size="13" fill="#6A6D75">each cache line (64 bytes) holds 4 complete CalorimeterCell structs — but we only read energy</text>
+
+<text x="60" y="214" text-anchor="end" font-family="monospace" font-size="12" fill="#555860">cache line 1</text>
+<rect x="80"  y="196" width="54" height="30" rx="4" fill="#5B9BD5" stroke="#85B7EB" stroke-width="0.5"/>
+<rect x="80"  y="196" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="107"  y="215" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">eta₀</text>
+<rect x="138" y="196" width="54" height="30" rx="4" fill="#E8B44A" stroke="#FAC775" stroke-width="0.5"/>
+<rect x="138" y="196" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="165" y="215" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">phi₀</text>
+<rect x="196" y="196" width="54" height="30" rx="4" fill="#4DB88C" stroke="#5DCAA5" stroke-width="0.5"/>
+<rect x="196" y="196" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="223" y="215" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">t₀</text>
+<rect x="254" y="196" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="281" y="215" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₀</text>
+<rect x="320" y="196" width="54" height="30" rx="4" fill="#5B9BD5" stroke="#85B7EB" stroke-width="0.5"/>
+<rect x="320" y="196" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="347" y="215" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">eta₁</text>
+<rect x="378" y="196" width="54" height="30" rx="4" fill="#E8B44A" stroke="#FAC775" stroke-width="0.5"/>
+<rect x="378" y="196" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="405" y="215" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">phi₁</text>
+<rect x="436" y="196" width="54" height="30" rx="4" fill="#4DB88C" stroke="#5DCAA5" stroke-width="0.5"/>
+<rect x="436" y="196" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="463" y="215" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">t₁</text>
+<rect x="494" y="196" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="521" y="215" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₁</text>
+<rect x="560" y="196" width="54" height="30" rx="4" fill="#5B9BD5" stroke="#85B7EB" stroke-width="0.5"/>
+<rect x="560" y="196" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="587" y="215" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">eta₂</text>
+<rect x="618" y="196" width="54" height="30" rx="4" fill="#E8B44A" stroke="#FAC775" stroke-width="0.5"/>
+<rect x="618" y="196" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="645" y="215" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">phi₂</text>
+<rect x="676" y="196" width="54" height="30" rx="4" fill="#4DB88C" stroke="#5DCAA5" stroke-width="0.5"/>
+<rect x="676" y="196" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="703" y="215" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">t₂</text>
+<rect x="734" y="196" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="761" y="215" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₂</text>
+<rect x="800" y="196" width="54" height="30" rx="4" fill="#5B9BD5" stroke="#85B7EB" stroke-width="0.5"/>
+<rect x="800" y="196" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="827" y="215" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">eta₃</text>
+<rect x="858" y="196" width="54" height="30" rx="4" fill="#E8B44A" stroke="#FAC775" stroke-width="0.5"/>
+<rect x="858" y="196" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="885" y="215" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">phi₃</text>
+<rect x="916" y="196" width="54" height="30" rx="4" fill="#4DB88C" stroke="#5DCAA5" stroke-width="0.5"/>
+<rect x="916" y="196" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="943" y="215" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">t₃</text>
+<rect x="974" y="196" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="1001" y="215" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₃</text>
+
+<text x="60" y="254" text-anchor="end" font-family="monospace" font-size="12" fill="#555860">cache line 2</text>
+<rect x="80"  y="236" width="54" height="30" rx="4" fill="#5B9BD5" stroke="#85B7EB" stroke-width="0.5"/>
+<rect x="80"  y="236" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="107"  y="255" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">eta₄</text>
+<rect x="138" y="236" width="54" height="30" rx="4" fill="#E8B44A" stroke="#FAC775" stroke-width="0.5"/>
+<rect x="138" y="236" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="165" y="255" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">phi₄</text>
+<rect x="196" y="236" width="54" height="30" rx="4" fill="#4DB88C" stroke="#5DCAA5" stroke-width="0.5"/>
+<rect x="196" y="236" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="223" y="255" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">t₄</text>
+<rect x="254" y="236" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="281" y="255" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₄</text>
+<rect x="320" y="236" width="54" height="30" rx="4" fill="#5B9BD5" stroke="#85B7EB" stroke-width="0.5"/>
+<rect x="320" y="236" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="347" y="255" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">eta₅</text>
+<rect x="378" y="236" width="54" height="30" rx="4" fill="#E8B44A" stroke="#FAC775" stroke-width="0.5"/>
+<rect x="378" y="236" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="405" y="255" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">phi₅</text>
+<rect x="436" y="236" width="54" height="30" rx="4" fill="#4DB88C" stroke="#5DCAA5" stroke-width="0.5"/>
+<rect x="436" y="236" width="54" height="30" rx="4" fill="url(#hatch)"/>
+<text x="463" y="255" text-anchor="middle" font-family="monospace" font-size="10" fill="#0B0D12">t₅</text>
+<rect x="494" y="236" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="521" y="255" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₅</text>
+<text x="600" y="255" font-family="monospace" font-size="12" fill="#555860">. . .</text>
+
+<rect x="80"  y="288" width="280" height="52" rx="8" fill="#13161D" stroke="#2A2D35" stroke-width="0.5"/>
+<text x="100" y="310" font-size="22" font-weight="600" fill="#E0E0E0">3</text>
+<text x="100" y="328" font-size="11" fill="#6A6D75">cache fetches for 10 energy values</text>
+<rect x="380" y="288" width="280" height="52" rx="8" fill="#13161D" stroke="#2A2D35" stroke-width="0.5"/>
+<text x="400" y="310" font-size="22" font-weight="600" fill="#E85D4A">25%</text>
+<text x="400" y="328" font-size="11" fill="#6A6D75">of fetched bytes actually used</text>
+<rect x="680" y="288" width="350" height="52" rx="8" fill="#13161D" stroke="#2A2D35" stroke-width="0.5"/>
+<text x="700" y="310" font-size="22" font-weight="600" fill="#E85D4A">75%</text>
+<text x="700" y="328" font-size="11" fill="#6A6D75">bandwidth wasted on eta, phi, time</text>
+
+<rect x="80" y="356" width="950" height="44" rx="8" fill="#2A1418" stroke="#6B2A2A" stroke-width="0.5"/>
+<text x="555" y="383" text-anchor="middle" font-size="13" fill="#E8897A">Each fetch loads 4 complete CalorimeterCell structs (64 bytes) but only 16 bytes of energy data are needed.  The other 48 bytes are never read.</text>
+
+<line x1="120" y1="430" x2="1080" y2="430" stroke="#2A2D35" stroke-width="0.5" stroke-dasharray="6 4"/>
+
+<text x="600" y="470" text-anchor="middle" font-size="20" font-weight="600" fill="#E0E0E0">Struct of Arrays (SoA) — performance-optimised</text>
+
+<rect x="120" y="486" width="960" height="60" rx="8" fill="#13161D" stroke="#2A2D35" stroke-width="0.5"/>
+<text x="140" y="508" font-family="monospace" font-size="13" fill="#7A8090">struct CalorimeterCells { vector&lt;float&gt; eta, phi, time, energy; };</text>
+<text x="720" y="508" font-family="monospace" font-size="13" fill="#555860">// separate arrays</text>
+<text x="140" y="530" font-family="monospace" font-size="13" fill="#7A8090">for (int i = 0; i &lt; N; ++i) total += cells.energy[i];            </text>
+<text x="720" y="530" font-family="monospace" font-size="13" fill="#555860">// touches only energy[]</text>
+
+<text x="120" y="570" font-size="13" fill="#6A6D75">each cache line holds 16 consecutive energy values — every byte fetched is useful</text>
+
+<text x="60" y="604" text-anchor="end" font-family="monospace" font-size="12" fill="#555860">cache line 1</text>
+<rect x="80"  y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="107" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₀</text>
+<rect x="138" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="165" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₁</text>
+<rect x="196" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="223" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₂</text>
+<rect x="254" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="281" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₃</text>
+<rect x="320" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="347" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₄</text>
+<rect x="378" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="405" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₅</text>
+<rect x="436" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="463" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₆</text>
+<rect x="494" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="521" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₇</text>
+<rect x="560" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="587" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₈</text>
+<rect x="618" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="645" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₉</text>
+<rect x="676" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="703" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₁₀</text>
+<rect x="734" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="761" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₁₁</text>
+<rect x="800" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="827" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₁₂</text>
+<rect x="858" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="885" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₁₃</text>
+<rect x="916" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="943" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₁₄</text>
+<rect x="974" y="586" width="54" height="30" rx="4" fill="#D87A55" stroke="#F0997B" stroke-width="1.5"/>
+<text x="1001" y="605" text-anchor="middle" font-family="monospace" font-size="10" font-weight="600" fill="#0B0D12">E₁₅</text>
+
+<rect x="80"  y="636" width="280" height="52" rx="8" fill="#13161D" stroke="#2A2D35" stroke-width="0.5"/>
+<text x="100" y="658" font-size="22" font-weight="600" fill="#E0E0E0">1</text>
+<text x="100" y="676" font-size="11" fill="#6A6D75">cache fetch for 16 energy values</text>
+<rect x="380" y="636" width="280" height="52" rx="8" fill="#13161D" stroke="#2A2D35" stroke-width="0.5"/>
+<text x="400" y="658" font-size="22" font-weight="600" fill="#4ADE80">100%</text>
+<text x="400" y="676" font-size="11" fill="#6A6D75">of fetched bytes used</text>
+<rect x="680" y="636" width="350" height="52" rx="8" fill="#13161D" stroke="#2A2D35" stroke-width="0.5"/>
+<text x="700" y="658" font-size="22" font-weight="600" fill="#4ADE80">4×</text>
+<text x="700" y="676" font-size="11" fill="#6A6D75">more values per fetch vs AoS</text>
+
+<rect x="80" y="704" width="950" height="44" rx="8" fill="#0E2418" stroke="#1B5E30" stroke-width="0.5"/>
+<text x="555" y="731" text-anchor="middle" font-size="13" fill="#7DD4A0">The energy[] array is fully packed.  Every byte in every cache line is useful.  eta[], phi[], time[] sit elsewhere — never fetched.</text>
+
+<text x="600" y="784" text-anchor="middle" font-size="13" fill="#7A8090">At N = 10,000 cells:  AoS fetches 160 KB (40 KB useful)  ·  SoA fetches 40 KB (all useful)</text>
+<text x="600" y="804" text-anchor="middle" font-size="14" font-weight="600" fill="#E0E0E0">Same data.  Same result.  4× less memory traffic.</text>
+
+</svg>
