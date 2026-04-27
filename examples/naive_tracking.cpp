@@ -1,17 +1,18 @@
 /*
  * naive_tracking.cpp
  *
- * Pedagogical example: simplified 2D track reconstruction
- * for "C++ in Real-Time Analysis" — guest lecture.
+ * More realistic example: simplified 2D track reconstruction
  *
  * Models a simplified ATLAS ITk-like barrel tracker in the
  * transverse (r-φ) plane:
- *   - 9 concentric cylindrical layers (5 pixel + 4 strip)
- *   - Charged particles curve in a 4T solenoidal B-field
+ *   - 9 concentric cylindrical silicon layers (5 pixel + 4 strip)
+ *   - Charged particles curve in a 4 Tesla solenoidal B-field
  *   - Tracks are circles in the transverse plane
  *
  * Physics recap:
- *   In a uniform B-field along z, a charged particle follows
+ *   In a uniform B-field along the z axis
+ *   (the direction orthogonal to the (r-φ) plane)
+ *   a charged particle follows
  *   a helix. Projected into the transverse (x-y) plane, this
  *   is a circle with radius:
  *
@@ -19,10 +20,11 @@
  *
  *   For B = 4T:  R = pT / 1.2  (in metres)
  *
- * The code is written NAIVELY — exactly as a 3rd/4th year
- * student might write it after a standard C++ course.
+ * The code is written intuitively, without specific care 
+ * for optimization.
  * Comments marked with ⚠ PERFORMANCE highlight places where
- * the code could be improved for real-time use.
+ * the code could be made more efficient, becoming more suited to 
+ * a real time usage.
  *
  * Compile:
  *   g++ -O2 -std=c++17 -o naive_tracking naive_tracking.cpp
@@ -30,8 +32,7 @@
  * Run:
  *   ./naive_tracking
  *
- * Expected runtime: O(10s) in naive mode — deliberately slow
- * to make the point that clean code is not fast code.
+ * Expected runtime: O(10s) before optimizations
  */
 
 #include <iostream>
@@ -54,7 +55,7 @@
 
 constexpr double B_FIELD  = 4.0;      // Tesla — ATLAS solenoid
 constexpr double K_FACTOR = 0.3;      // pT = K × B × R  (natural units: GeV, T, m)
-constexpr double PI       = 3.14159265358979323846;
+constexpr double PI       = 3.14159;
 constexpr double TWO_PI   = 2.0 * PI;
 
 // ITk-inspired barrel layer radii [mm]
@@ -173,9 +174,13 @@ struct TrackCandidate {
     double pT;          // GeV
     double phi0;        // direction at closest approach
     double d0;          // transverse impact parameter [mm]
-    double chi2;        // fit chi-squared
+                        // i.e. minimum track approach distance to origin
+                        // usually 0, but some physics processes may result 
+                        // in large d0 tracks -- Displace tracks!
+                        // you will learn about those if you continue in particle physics!
+    double chi2;        // fit chi-square
     int    nHits;       // number of hits on track
-    int    charge;      // +1 or -1
+    int    charge;      // +1 or -1 
     std::vector<const IHit*> hits;  // pointers to associated hits
 };
 

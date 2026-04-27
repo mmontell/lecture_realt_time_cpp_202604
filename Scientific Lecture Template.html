@@ -1657,7 +1657,7 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
     </div>
     <div class="ftr">
       <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
-      <div class="page"><span class="bar" style="--progress: 4%;"></span><span class="num">01 / 28</span></div>
+      <div class="page"><span class="bar" style="--progress: 3%;"></span><span class="num">01 / 31</span></div>
     </div>
   </section>
 
@@ -1698,7 +1698,7 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
     </div>
     <div class="ftr">
       <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
-      <div class="page"><span class="bar" style="--progress: 7%;"></span><span class="num">02 / 28</span></div>
+      <div class="page"><span class="bar" style="--progress: 6%;"></span><span class="num">02 / 31</span></div>
     </div>
   </section>
 
@@ -1760,7 +1760,7 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
     </div>
     <div class="ftr">
       <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
-      <div class="page"><span class="bar" style="--progress: 11%;"></span><span class="num">03 / 28</span></div>
+      <div class="page"><span class="bar" style="--progress: 10%;"></span><span class="num">03 / 31</span></div>
     </div>
   </section>
 
@@ -1771,14 +1771,14 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
       <div class="tag">DIVIDER</div>
     </div>
     <div class="main">
-      <div class="sec-num">PART ONE — 5 MINUTES</div>
+      <div class="sec-num">PART ONE</div>
       <h2>ATLAS<br/>the forge of physics</h2>
       <div class="dek">What does the largest experiment in physics do, and why exceptional real-time computing is needed!</div>
       <div id="divider-motif-1" style="position:absolute; right: 96px; top: 50%; transform: translateY(-50%); width: 520px; height: 520px; opacity: 0.9;"></div>
     </div>
     <div class="ftr">
       <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
-      <div class="page"><span class="bar" style="--progress: 14%;"></span><span class="num">04 / 28</span></div>
+      <div class="page"><span class="bar" style="--progress: 13%;"></span><span class="num">04 / 31</span></div>
     </div>
   </section>
 
@@ -1866,7 +1866,7 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
     </div>
     <div class="ftr">
       <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
-      <div class="page"><span class="bar" style="--progress: 21%;"></span><span class="num">06 / 28</span></div>
+      <div class="page"><span class="bar" style="--progress: 19%;"></span><span class="num">06 / 31</span></div>
     </div>
   </section>
 
@@ -2040,7 +2040,7 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
       <div class="tag">DIVIDER</div>
     </div>
     <div class="main">
-      <div class="sec-num">PART TWO — 12 MINUTES</div>
+      <div class="sec-num">PART TWO</div>
       <h2>Pills of computational<br/>efficiency.</h2>
       <div class="dek">Every line matters.
       The key is choosing where to spend time.</div>
@@ -2502,14 +2502,14 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
       <div class="tag">DIVIDER</div>
     </div>
     <div class="main">
-      <div class="sec-num">PART THREE — 12 MINUTES</div>
+      <div class="sec-num">PART THREE</div>
       <h2>Let's put it all <br>together!</h2>
       <div class="dek">A simple example showcasing the principles illustrated so far.</div>
       <div id="divider-motif-3" style="position:absolute; right: 96px; top: 50%; transform: translateY(-50%); width: 520px; height: 520px; opacity: 0.9;"></div>
     </div>
     <div class="ftr">
       <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
-      <div class="page"><span class="bar" style="--progress: 86%;"></span><span class="num">24 / 28</span></div>
+      <div class="page"><span class="bar" style="--progress: 77%;"></span><span class="num">24 / 31</span></div>
     </div>
   </section>
 
@@ -2517,66 +2517,169 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
   <section class="slide" data-label="Track finding">
     <div class="hdr">
       <div class="sec">§ 03 · Algorithms</div>
-      <div class="tag">04 · TRACK-FINDING</div>
+      <div class="tag">04 · NEAREST NEIGHBOUR FINDING</div>
     </div>
-    <div class="main">
-      <div class="eyebrow">Cellular-automaton track seeding</div>
-      <h3 style="margin-top:12px;">From detector hits $\{h_i\}$ to candidate tracks $\{T_k\}$.</h3>
+    <div class="main" style="display:flex; flex-direction:column;">
+      <h3 style="margin-top:12px;"><span style="color:#0ea5e9; font-size:40px;"><b>Nearest-Neighbour finding for random points.</b></span></h3>
+      <h4 style="margin-top:5px;">A surprisingly common operation in Real-Time reconstruction for particle physics.</h4>
 
-      <div class="algo-layout" style="margin-top: 28px;">
-        <div class="pane">
-          <h4>Pseudocode · kernel</h4>
-          <div class="pcode">
-<span class="line"><span class="n">1</span><span class="kw">input</span>  H = {h₁, …, hₙ}  <span class="cm"># hits, grouped by layer</span></span>
-<span class="line"><span class="n">2</span><span class="kw">output</span> T           <span class="cm"># accepted tracks</span></span>
-<span class="line"><span class="n">3</span></span>
-<span class="line"><span class="n">4</span><span class="kw">for each</span> layer pair (ℓ, ℓ+1):</span>
-<span class="line"><span class="n">5</span><span class="ind"></span><span class="kw">build</span> doublets  D ← {(a,b) | a∈ℓ, b∈ℓ+1,</span>
-<span class="line"><span class="n">6</span><span class="ind"></span><span class="ind"></span>                    &nbsp;&nbsp;&nbsp;|Δφ| &lt; δ_φ ∧ |Δη| &lt; δ_η}</span>
-<span class="line"><span class="n">7</span></span>
-<span class="line"><span class="n">8</span><span class="kw">for each</span> triplet of adjacent layers:</span>
-<span class="line"><span class="n">9</span><span class="ind"></span><span class="kw">link</span> compatible doublets → seeds S</span>
-<span class="line"><span class="n">10</span><span class="ind"></span>state[s] ← 1  <span class="kw">for each</span> s ∈ S</span>
-<span class="line"><span class="n">11</span></span>
-<span class="line"><span class="n">12</span><span class="kw">repeat</span> until fixed point:   <span class="cm"># automaton</span></span>
-<span class="line"><span class="n">13</span><span class="ind"></span><span class="kw">for each</span> s: state[s] ← max neighbor + 1</span>
-<span class="line"><span class="n">14</span></span>
-<span class="line"><span class="n">15</span><span class="kw">for each</span> maximal chain s* of length ≥ L:</span>
-<span class="line"><span class="n">16</span><span class="ind"></span>T ← T ∪ <span class="kw">fit</span>(s*)  <span class="cm"># Kalman, one pass</span></span>
-<span class="line"><span class="n">17</span></span>
-<span class="line"><span class="n">18</span><span class="kw">return</span> {t ∈ T | χ²(t)/ndf &lt; τ}</span>
+      <!-- two columns -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:40px; flex:1;">
+        <div>
+          <div class="code-head">
+            
+            <span>Intuitive approach &rAarr; every point combination is evaluated &rArr; cost is O(N²)</span>
           </div>
+<div class="code" style="font-size:16px;"><span class="ln"> 1</span><span class="kw">static</span> <span class="kw">long long</span> <span class="fn">nearestNeighbour_Intuitive</span>(<span class="kw">const</span> std::vector&lt;<span class="ty">Point</span>&gt;&amp; pts) {
+<span class="ln"> 2</span>    <span class="kw">const int</span> N = <span class="kw">static_cast</span>&lt;<span class="kw">int</span>&gt;(pts.<span class="fn">size</span>());
+<span class="ln"> 3</span>    <span class="kw">long long</span> found = 0;
+<span class="ln"> 4</span>
+<span class="ln"> 5</span>    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; N; ++i) {
+<span class="ln"> 6</span>        <span class="kw">float</span> best_dist2 = 999999;
+<span class="ln"> 7</span>        <span class="kw">int</span>   best_j     = -1;
+<span class="ln"> 8</span>
+<span class="ln"> 9</span>        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; N; ++j) {
+<span class="ln">10</span>            <span class="kw">if</span> (j == i) <span class="kw">continue</span>;
+<span class="ln">11</span>            <span class="kw">float</span> dx = pts[i].x - pts[j].x;
+<span class="ln">12</span>            <span class="kw">float</span> dy = pts[i].y - pts[j].y;
+<span class="ln">13</span>            <span class="kw">float</span> d2 = dx*dx + dy*dy;
+<span class="ln">14</span>            <span class="kw">if</span> (d2 &lt; best_dist2) {
+<span class="ln">15</span>                best_dist2 = d2;
+<span class="ln">16</span>                best_j     = j;
+<span class="ln">17</span>            }
+<span class="ln">18</span>        }
+<span class="ln">19</span>        <span class="kw">if</span> (best_j &gt;= 0) ++found;
+<span class="ln">20</span>    }
+<span class="ln">21</span>    <span class="kw">return</span> found;
+<span class="ln">22</span>}</div>
+        </div>
+        <div style="display:flex; align-items:flex-start; justify-content:center;">
+          <img src="uploads/nn_starting_grid.svg"
+               style="width:100%;height:700px; object-fit:contain; object-position:top;"
+               alt="">
+        </div>
+      </div>
+
+      <!-- full-width text below -->
+      <p style="margin-top:-200px; font-size:30px;text-align:center;">A simple, correct implementation. Something you could get from ChatGPT. <br> But can we do better?</p>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 81%;"></span><span class="num">25 / 31</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 26 PUTTING IT IN PRACTICE ============ -->
+  <section class="slide" data-label="Context">
+    <div class="hdr">
+      <div class="sec">§ 03 · Algorithms</div>
+      <div class="tag">04 · NEAREST NEIGHBOUR FINDING</div>
+    </div>
+    <div class="main" style="display:flex; flex-direction:column;">
+
+      <!-- slide title -->
+      <h3 style="margin-top:12px;"><span style="color:#0ea5e9; font-size:40px;"><b>Putting what we learned in practice!</b></span></h3>
+
+      <!-- two columns -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:16px; flex:1;">
+
+        <!-- left column -->
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <h4 style="text-align:center; font-size:30px;color:#0ea5e9;">Using Struct of Arrays</h4>
+          <p style="margin-top:60px;font-size:var(--small);text-align:center;">"Point" object with <i>x,y</i> coordinate attributes. <br>Then points are stored as a std::vector&lt;Point&gt;</p>
+      
+<div class="code" style="font-size:15px;"><span class="ln">1</span><span class="kw">struct</span> <span class="ty">Point</span> {   <span class="cm">// "Point" struct, intuitive layout</span>
+<span class="ln">2</span>    <span class="ty">float</span> x, y;
+<span class="ln">3</span>};
+<span class="ln">4</span>std::vector&lt;<span class="ty">Point</span>&gt; points(N); <span class="cm">// AoS layout</span>
+<span class="ln">5</span><span class="kw">for</span> (<span class="kw">auto</span>&amp; p : points) { p.x = <span class="fn">dist</span>(rng); p.y = <span class="fn">dist</span>(rng); }</div>
+          <p style="margin-top:25px;font-size:var(--small);text-align:center;">The "Point" structure is easy, clear and usable. But not efficient in a large loop. <br>Better &rArr; <span style="color:#0ea5e9">define auxiliary vectors for loop usage</span> with the SoA layout</p>
+          
+<div class="code" style="font-size:15px;"><span class="ln">1</span><span class="cm">// Turn AoS into SoA</span>
+<span class="ln">2</span>std::vector&lt;<span class="ty">float</span>&gt; sx(N), sy(N);
+<span class="ln">3</span><span class="cm">// x-array and y-array are filled</span>
+<span class="ln">4</span><span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; N; ++i) { sx[i] = points[i].x; sy[i] = points[i].y; }</div>
         </div>
 
-        <div class="pane">
-          <h4>Complexity &amp; cost model</h4>
-          <div class="math-feature" style="font-size: 26px; padding: 18px 0;">
-            $$C(n) \;=\; \underbrace{\alpha\, n}_{\text{seed}} \;+\; \underbrace{\beta\, n \log n}_{\text{link}} \;+\; \underbrace{\gamma\, k\, L}_{\text{fit}}$$
-          </div>
+        <!-- right column -->
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <h4 style="text-align:center;font-size:30px; color:#0ea5e9;">SoA + Pre-Allocating Memory</h4>
+          <p style="font-size:var(--small);text-align: center;">It's intuitive to define SoA vectors inside the event loop!</p>
+          
+<div class="code" style="font-size:15px;"><span class="ln">1</span><span class="cm">// called once per event</span>
+<span class="ln">2</span><span class="kw">long</span> <span class="fn">nearestNeighbour</span>([args]) {
+<span class="ln">3</span>
+<span class="ln">4</span>    <span class="cm">// vector is initialized and memory allocated once per event</span>
+<span class="ln">5</span>    std::vector&lt;<span class="ty">float</span>&gt; sx(N), sy(N); <span class="cm">// N = number of points</span>
+<span class="ln">6</span>}</div>
+          <p style="font-size:var(--small);text-align:center;margin-top:15px;">But that means allocating large memory blocks once per event. <br> Better to initialize outisde event loop, then simply overwriting data every event <br> Overwriting is cheaper than re-allocating.</p>
 
-          <p style="font-size: 19px; color: var(--ink-mute); max-width: 520px; margin-top: 8px;">
-            With $k$ candidate chains of length $L$. In practice the constant
-            $\alpha$ dominates: <span class="accent">90% of wall time lives in doublet building</span>.
-          </p>
-
-          <div class="rule-thin" style="margin: 18px 0;"></div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-            <div>
-              <div class="eyebrow" style="color: var(--ink-mute);">Typical inputs</div>
-              <p class="mono" style="font-size: 17px; margin-top: 6px;">n ≈ 10<sup>4</sup> hits<br/>L = 8 layers<br/>k ≈ 200 chains</p>
-            </div>
-            <div>
-              <div class="eyebrow" style="color: var(--ink-mute);">Target · p99</div>
-              <p class="mono" style="font-size: 17px; margin-top: 6px; color: var(--accent-ink);">≤ 1.8 μs / event</p>
-            </div>
-          </div>
+<div class="code" style="font-size:15px;"><span class="ln"> 1</span><span class="cm">// vectors are allocated OUTSIDE EVENT LOOP</span>
+<span class="ln"> 2</span><span class="kw">struct</span> <span class="ty">NNWorkspace</span> {
+<span class="ln"> 3</span>    std::vector&lt;<span class="ty">float</span>&gt; sx, sy;
+<span class="ln"> 4</span>    <span class="kw">explicit</span> <span class="fn">NNWorkspace</span>(<span class="kw">int</span> N_points) : <span class="fn">sx</span>(N_points), <span class="fn">sy</span>(N_points) {}
+<span class="ln"> 5</span>};
+<span class="ln"> 6</span>
+<span class="ln"> 7</span><span class="kw">long</span> <span class="fn">nearestNeighbour</span>(args, <span class="ty">NNWorkspace</span>(N_points)) <span class="cm">// pre-allocated vectors</span>
+<span class="ln"> 8</span>{ [actions] }
+<span class="ln"> 9</span>
+<span class="ln">10</span><span class="kw">for</span> (i = 0; i &lt; N_Events; ++i) {
+<span class="ln">11</span>    <span class="fn">nearestNeighbour</span>( args, workspace(N_points) )
+<span class="ln">12</span>}</div>
         </div>
+
+      </div>
+
+      <!-- full-width bottom text -->
+      <p style="margin-top:0px; font-size:40px; text-align:center;color: #0ea5e9;">Let's see how this works in practice!</p>
+
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 84%;"></span><span class="num">26 / 31</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 27 NN BENCHMARK ============ -->
+  <section class="slide" data-label="Context">
+    <div class="hdr">
+      <div class="sec">§ 03 · Algorithms</div>
+      <div class="tag">04 · NEAREST NEIGHBOUR FINDING</div>
+    </div>
+    <div class="main" style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:0;">
+      <img src="uploads/nn_benchmark_memory_only.svg"
+           style="width:80%; height:700px;margin-top:-50px;flex:1; object-fit:contain; object-position:top;"
+           alt="">
+      <p style="font-size:var(--body); text-align:center; color:#0ea5e9; padding:12px 0 0;">40% Improvement! But we can do better with good algorithmic design.</p>
+    </div>
+    <div class="ftr">
+      <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
+      <div class="page"><span class="bar" style="--progress: 87%;"></span><span class="num">27 / 31</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 28 EXIT EARLY ============ -->
+  <section class="slide" data-label="Context">
+    <div class="hdr">
+      <div class="sec">§ 03 · Algorithms</div>
+      <div class="tag">04 · NEAREST NEIGHBOUR FINDING</div>
+    </div>
+    <div class="main" style="display:flex; flex-direction:column;">
+      <h3 style="margin-top:12px;"><span style="color:#0ea5e9; font-size:40px;"><b>EXIT EARLY / LEVERAGE PROBLEM STRUCTURE</b></span></h3>
+      <p style="margin-top:16px; font-size:var(--body);">We don't need to evaluate every single point combination</p>
+      <div class="meta" style="margin-top:16px;">
+        <div class="row"><span class="k">Key</span><span class="v">Value placeholder</span></div>
+        <div class="row"><span class="k">Key</span><span class="v">Value placeholder</span></div>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:center; margin-top:20px; flex:1;">
+        <img src="uploads/placeholder.png"
+             style="width:100%; height:100%; object-fit:contain; object-position:center;"
+             alt="">
       </div>
     </div>
     <div class="ftr">
       <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
-      <div class="page"><span class="bar" style="--progress: 89%;"></span><span class="num">25 / 28</span></div>
+      <div class="page"><span class="bar" style="--progress: 93%;"></span><span class="num">28 / 31</span></div>
     </div>
   </section>
 
@@ -2640,7 +2743,7 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
     </div>
     <div class="ftr">
       <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
-      <div class="page"><span class="bar" style="--progress: 93%;"></span><span class="num">26 / 28</span></div>
+      <div class="page"><span class="bar" style="--progress: 93%;"></span><span class="num">28 / 30</span></div>
     </div>
   </section>
 
@@ -2682,7 +2785,7 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
     </div>
     <div class="ftr">
       <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
-      <div class="page"><span class="bar" style="--progress: 96%;"></span><span class="num">27 / 28</span></div>
+      <div class="page"><span class="bar" style="--progress: 97%;"></span><span class="num">29 / 30</span></div>
     </div>
   </section>
 
@@ -2722,7 +2825,7 @@ table.cmp .pos { color: var(--accent-ink); font-weight: 500; }
     </div>
     <div class="ftr">
       <div class="credit">Marco Montella · Ohio State University · Guest Lecture at University of Manchester, 2026</div>
-      <div class="page"><span class="bar" style="--progress: 100%;"></span><span class="num">28 / 28</span></div>
+      <div class="page"><span class="bar" style="--progress: 100%;"></span><span class="num">31 / 31</span></div>
     </div>
   </section>
 

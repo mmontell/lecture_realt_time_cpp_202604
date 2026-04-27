@@ -1,16 +1,12 @@
 /*
  * nearest_neighbour_benchmark.cpp
  *
- * Demonstrates three progressive optimisations of a nearest-neighbour search.
+ * Three ways of writing a nearest-neighbour search.
  *
  * The problem:
- *   Given N 2D points (e.g. detector hits in the transverse plane),
+ *   Given N 2D points.
  *   find, for each point, its nearest neighbour.
  *
- * This is structurally identical to doublet-seed finding in a tracker:
- *   - the RoI window  → the search window cutoff
- *   - hit collections → space point collections
- *   - AoS vs SoA     → layout of TrigSiSpacePointBase collections
  *
  * Compile with:
  *   g++ -O2 -std=c++17 -o nn_bench nearest_neighbour_benchmark.cpp
@@ -78,7 +74,7 @@ static void printTableHeader() {
 //  Data generation
 // ============================================================
 
-struct Point {   // Array-of-Structs (AoS) — "naive" layout
+struct Point {   // Array-of-Structs (AoS) — "intuitive" approach
     float x, y;
 };
 
@@ -86,23 +82,21 @@ struct Point {   // Array-of-Structs (AoS) — "naive" layout
 static std::vector<Point> generatePoints(int N, float detector_size = 1000.f, unsigned seed = 42) {
     std::mt19937 rng(seed);
     std::uniform_real_distribution<float> dist(0.f, detector_size);
-    std::vector<Point> pts(N);
-    for (auto& p : pts) { p.x = dist(rng); p.y = dist(rng); }
-    return pts;
+    std::vector<Point> points(N);
+    for (auto& p : points) { p.x = dist(rng); p.y = dist(rng); }
+    return points;
 }
 
 // ============================================================
-//  Version 1 — Naive O(N²)
+//  Version 1 — Intuitive - O(N^2) scaling
 //
-//  What a student just out of their C++ course would write.
-//  Correct. Clear. Slow.
 //  - Array-of-Structs layout
 //  - No sorting, no windowing
 //  - Every pair checked unconditionally
 // ============================================================
 
-static long long nearestNeighbour_Naive(const std::vector<Point>& pts) {
-    const int N = static_cast<int>(pts.size());
+static long long nearestNeighbour_intuitive(const std::vector<Point>& points) {
+    const int N = static_cast<int>(points.size());
     long long found = 0;
 
     for (int i = 0; i < N; ++i) {
@@ -111,8 +105,8 @@ static long long nearestNeighbour_Naive(const std::vector<Point>& pts) {
 
         for (int j = 0; j < N; ++j) {
             if (j == i) continue;
-            float dx = pts[i].x - pts[j].x;
-            float dy = pts[i].y - pts[j].y;
+            float dx = points[i].x - points[j].x;
+            float dy = points[i].y - points[j].y;
             float d2 = dx*dx + dy*dy;
             if (d2 < best_dist2) {
                 best_dist2 = d2;
@@ -127,27 +121,28 @@ static long long nearestNeighbour_Naive(const std::vector<Point>& pts) {
 // ============================================================
 //  Version 2 — Sort + search window
 //
-//  One key insight: sort by x, then for each point only
-//  scan neighbours within a window |Δx| < current_best.
-//  This is exactly the RoI window idea in TrigFTF:
-//  don't look at hits you can't possibly match.
+//  Points are sorted by x, then for each point only
+//  scan neighbours within a window |Delta(x)| < current_best.
+//  We don't look at hits we can't possibly match.
 //
 //  Complexity: O(N log N + N·k)  where k << N in practice.
 // ============================================================
 
-static long long nearestNeighbour_Sorted(const std::vector<Point>& pts) {
-    const int N = static_cast<int>(pts.size());
+static long long nearestNeighbour_Sorted(const std::vector<Point>& points) {
+    const int N = static_cast<int>(points.size());
 
-    // Build a sorted index by x-coordinate (no copy of data)
+    // Build a sorted index vector by x-coordinate 
+    // no data is actually copied - good! no extra memory allocation
     std::vector<int> idx(N);
     std::iota(idx.begin(), idx.end(), 0);
     std::sort(idx.begin(), idx.end(), [&](int a, int b){
-        return pts[a].x < pts[b].x;
+        return points[a].x < points[b].x;
     });
 
     // Also build a lookup: original index → sorted position
     std::vector<int> rank(N);
-    for (int s = 0; s < N; ++s) rank[idx[s]] = s;
+    for (int sortedOrder = 0; sortedOrder < N; ++sortedOrder) rank[idx[sortedOrder]] = sortedOrder;
+
 
     long long found = 0;
 
@@ -156,15 +151,15 @@ static long long nearestNeighbour_Sorted(const std::vector<Point>& pts) {
         int   best_j     = -1;
 
         int si = rank[i];          // sorted position of point i
-        float xi = pts[i].x;
-        float yi = pts[i].y;
+        float xi = points[i].x;
+        float yi = points[i].y;
 
-        // Scan right from si
+        // Scan right from current point
         for (int s = si + 1; s < N; ++s) {
             int j = idx[s];
-            float dx = pts[j].x - xi;
+            float dx = points[j].x - xi;
             if (dx * dx >= best_dist2) break;  // ← the window cut: RoI in x
-            float dy = pts[j].y - yi;
+            float dy = points[j].y - yi;
             float d2 = dx*dx + dy*dy;
             if (d2 < best_dist2) { best_dist2 = d2; best_j = j; }
         }
@@ -172,9 +167,9 @@ static long long nearestNeighbour_Sorted(const std::vector<Point>& pts) {
         // Scan left from si
         for (int s = si - 1; s >= 0; --s) {
             int j = idx[s];
-            float dx = xi - pts[j].x;
+            float dx = xi - points[j].x;
             if (dx * dx >= best_dist2) break;  // ← same window cut
-            float dy = pts[j].y - yi;
+            float dy = points[j].y - yi;
             float d2 = dx*dx + dy*dy;
             if (d2 < best_dist2) { best_dist2 = d2; best_j = j; }
         }
@@ -192,31 +187,29 @@ static long long nearestNeighbour_Sorted(const std::vector<Point>& pts) {
 //  Point structs.
 //
 //  Why it matters:
-//  When the inner loop accesses pts[j].x, in AoS layout it
+//  When the inner loop accesses points[j].x, in AoS layout it
 //  loads a cache line containing BOTH x and y — but it only
 //  needs x for the early-exit check. Half the memory bandwidth
 //  is wasted. In SoA layout, the x array is fully packed:
 //  every byte fetched from memory is useful.
 //
-//  This mirrors the SoA approach used in vectorised track
-//  seed generators (e.g. TrigTrackSeedGenerator internals).
 // ============================================================
 
-static long long nearestNeighbour_SoA(const std::vector<Point>& pts) {
-    const int N = static_cast<int>(pts.size());
+static long long nearestNeighbour_SoA(const std::vector<Point>& points) {
+    const int N = static_cast<int>(points.size());
 
     // Build sorted SoA buffers
     std::vector<int> idx(N);
     std::iota(idx.begin(), idx.end(), 0);
     std::sort(idx.begin(), idx.end(), [&](int a, int b){
-        return pts[a].x < pts[b].x;
+        return points[a].x < points[b].x;
     });
 
     // Separate, contiguous x and y arrays — cache-friendly for x-only scan
     std::vector<float> sx(N), sy(N);
     for (int s = 0; s < N; ++s) {
-        sx[s] = pts[idx[s]].x;
-        sy[s] = pts[idx[s]].y;
+        sx[s] = points[idx[s]].x;
+        sy[s] = points[idx[s]].y;
     }
 
     std::vector<int> rank(N);
@@ -258,10 +251,8 @@ static long long nearestNeighbour_SoA(const std::vector<Point>& pts) {
 // ============================================================
 //  Version 4 — SoA + pre-allocated buffers + reserve()
 //
-//  Mirrors TrigFastTrackFinder's use of reserve() to avoid
-//  any heap allocation inside the hot path.
-//  Also: the sorted buffers are allocated once and reused
-//  across events (simulating a stateless but pre-warmed algo).
+//  Shows use of reserve() to avoid
+//  any heap allocation inside the loop
 // ============================================================
 
 struct NNSearchState {
@@ -272,18 +263,18 @@ struct NNSearchState {
     explicit NNSearchState(int N) : idx(N), sx(N), sy(N), rank(N) {}
 };
 
-static long long nearestNeighbour_PreAlloc(const std::vector<Point>& pts,
+static long long nearestNeighbour_PreAlloc(const std::vector<Point>& points,
                                             NNSearchState& state) {
-    const int N = static_cast<int>(pts.size());
+    const int N = static_cast<int>(points.size());
 
     std::iota(state.idx.begin(), state.idx.end(), 0);
     std::sort(state.idx.begin(), state.idx.end(), [&](int a, int b){
-        return pts[a].x < pts[b].x;
+        return points[a].x < points[b].x;
     });
 
     for (int s = 0; s < N; ++s) {
-        state.sx[s] = pts[state.idx[s]].x;
-        state.sy[s] = pts[state.idx[s]].y;
+        state.sx[s] = points[state.idx[s]].x;
+        state.sy[s] = points[state.idx[s]].y;
     }
     for (int s = 0; s < N; ++s) state.rank[state.idx[s]] = s;
 
@@ -352,22 +343,22 @@ static BenchResult benchmark(const std::string& label,
 //  Diagnostic: per-version inner-loop work analysis
 // ============================================================
 
-static void printWorkAnalysis(const std::vector<Point>& pts) {
-    const int N = static_cast<int>(pts.size());
+static void printWorkAnalysis(const std::vector<Point>& points) {
+    const int N = static_cast<int>(points.size());
 
-    // Count average inner-loop iterations for naive vs sorted
-    long long naive_iters  = 0;
+    // Count average inner-loop iterations for intuitive vs sorted
+    long long intuitive_iters  = 0;
     long long sorted_iters = 0;
 
-    // Naive: always N-1
-    naive_iters = static_cast<long long>(N) * (N - 1);
+    // intuitive: always N-1
+    intuitive_iters = static_cast<long long>(N) * (N - 1);
 
     // Sorted: count actual window scans
     std::vector<int> idx(N);
     std::iota(idx.begin(), idx.end(), 0);
-    std::sort(idx.begin(), idx.end(), [&](int a, int b){ return pts[a].x < pts[b].x; });
+    std::sort(idx.begin(), idx.end(), [&](int a, int b){ return points[a].x < points[b].x; });
     std::vector<float> sx(N), sy(N);
-    for (int s = 0; s < N; ++s) { sx[s] = pts[idx[s]].x; sy[s] = pts[idx[s]].y; }
+    for (int s = 0; s < N; ++s) { sx[s] = points[idx[s]].x; sy[s] = points[idx[s]].y; }
     std::vector<int> rank(N);
     for (int s = 0; s < N; ++s) rank[idx[s]] = s;
 
@@ -393,16 +384,16 @@ static void printWorkAnalysis(const std::vector<Point>& pts) {
     std::cout << "  ┌─────────────────────────────────┬──────────────┬────────────┐\n";
     std::cout << "  │ Version                         │ Inner iters  │ Reduction  │\n";
     std::cout << "  ├─────────────────────────────────┼──────────────┼────────────┤\n";
-    std::cout << "  │ Naive (all pairs)               │ "
-              << std::setw(12) << naive_iters << " │     1.0×   │\n";
+    std::cout << "  │ intuitive (all pairs)           │ "
+              << std::setw(12) << intuitive_iters << " │     1.0×   │\n";
     std::cout << "  │ Sorted + window                 │ "
               << std::setw(12) << sorted_iters << " │ "
               << std::setw(6) << std::fixed << std::setprecision(1)
-              << (double)naive_iters / sorted_iters << "×   │\n";
+              << (double)intuitive_iters / sorted_iters << "×   │\n";
     std::cout << "  └─────────────────────────────────┴──────────────┴────────────┘\n";
     std::cout << "\n  → The window cut alone eliminates ~"
               << std::setprecision(0)
-              << 100.0 * (1.0 - (double)sorted_iters / naive_iters)
+              << 100.0 * (1.0 - (double)sorted_iters / intuitive_iters)
               << "% of distance calculations.\n"
               << "    (This is exactly the RoI η-φ window in TrigFastTrackFinder.)\n\n";
 }
@@ -422,41 +413,41 @@ int main() {
     std::cout << "    Events timed     : " << N_EVENTS << "\n";
     
 
-    const auto pts = generatePoints(N_POINTS);
+    const auto points = generatePoints(N_POINTS);
 
     // ── Correctness check ──────────────────────────────────
     {
-        auto r1 = nearestNeighbour_Naive(pts);
-        auto r2 = nearestNeighbour_Sorted(pts);
-        auto r3 = nearestNeighbour_SoA(pts);
+        auto r1 = nearestNeighbour_intuitive(points);
+        auto r2 = nearestNeighbour_Sorted(points);
+        auto r3 = nearestNeighbour_SoA(points);
         NNSearchState state(N_POINTS);
-        auto r4 = nearestNeighbour_PreAlloc(pts, state);
+        auto r4 = nearestNeighbour_PreAlloc(points, state);
         assert(r1 == r2 && r2 == r3 && r3 == r4);
         std::cout << "  ✓ All versions agree on " << r1 << " nearest-neighbour pairs found.\n";
     }
 
     // ── Work analysis ──────────────────────────────────────
-    printWorkAnalysis(pts);
+    printWorkAnalysis(points);
 
     // ── Timing benchmarks ─────────────────────────────────
     printTableHeader();
 
     NNSearchState state(N_POINTS);
 
-    auto r1 = benchmark("V1: Naive O(N²)",
-        [&]{ return nearestNeighbour_Naive(pts); },
+    auto r1 = benchmark("V1: intuitive O(N²)",
+        [&]{ return nearestNeighbour_intuitive(points); },
         N_EVENTS);
 
     auto r2 = benchmark("V2: Sort + window cut  [+std::sort]",
-        [&]{ return nearestNeighbour_Sorted(pts); },
+        [&]{ return nearestNeighbour_Sorted(points); },
         N_EVENTS, r1.ms_per_event);
 
     auto r3 = benchmark("V3: Sort + SoA layout  [+cache]",
-        [&]{ return nearestNeighbour_SoA(pts); },
+        [&]{ return nearestNeighbour_SoA(points); },
         N_EVENTS, r1.ms_per_event);
 
     auto r4 = benchmark("V4: SoA + pre-alloc    [+no heap]",
-        [&]{ return nearestNeighbour_PreAlloc(pts, state); },
+        [&]{ return nearestNeighbour_PreAlloc(points, state); },
         N_EVENTS, r1.ms_per_event);
 
     printResult(r1);
